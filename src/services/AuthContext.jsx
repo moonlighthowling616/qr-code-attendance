@@ -4,23 +4,24 @@ export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
 	const [user, setUser] = useState(null);
-	let isAuthed = false
+	const [isAuthed, setIsAuthed] = useState(false)
 
 	useEffect(() => {
 		const token = localStorage.getItem('auth_token');
 		if (token) {
-			isAuthed = true
+			setIsAuthed(true)
 		} else {
-			isAuthed = false
+			setIsAuthed(false)
 		}
 	})
 
 	const login = async (email, password) => {  
 	    try {
-	      const response = await api.post('/api/login', { email, password });
-	      console.log(response)
-	      isAuthed = true
-	      localStorage.setItem('auth_token', response.data.access_token);
+	      	const response = await api.post('/api/login', { email, password });
+	      	console.log(response)
+	      	setUser(response.data.user)
+			setIsAuthed(true)
+	      	localStorage.setItem('auth_token', response.data.access_token);
 	  	} catch(err) {
 		  console.error(err)
 	    }
@@ -36,6 +37,7 @@ export default function AuthProvider({ children }) {
 	        }
 	      });
 	      console.log(response)
+			setIsAuthed(false)
 	      localStorage.removeItem('auth_token');
 	    } catch(err) {
 	      alert(err)

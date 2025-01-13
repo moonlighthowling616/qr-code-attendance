@@ -13,13 +13,12 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        present();
+      present();
       await login(email, password);
-        dismiss();
-
       history.push('/home')
+      dismiss();
     } catch (err) {
-        dismiss();
+      dismiss();
 
       console.error(err);
     }
