@@ -1,0 +1,29 @@
+.button-card {
+	width: 200px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px 12px 20px 12px ;
+	flex-direction: column;
+}
+.home-content {
+	display: flex; 
+	align-items: center;
+	justify-content: center;
+}
+.icon {
+	background-color: pink;
+	color: red;
+	padding: 12px;
+	border-radius: 5px;
+	font-size: 4em;
+}
+.profile-card {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.hello-text {
+	font-weight: bold !important;
+	font-size: 2em !important;
+}

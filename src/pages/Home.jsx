@@ -1,4 +1,12 @@
-import { useIonLoading, IonContent, IonButton, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useIonLoading, 
+IonAvatar, 
+IonButtons, 
+IonCard, 
+IonCardSubtitle , 
+IonText,
+IonIcon, IonContent, 
+IonCardContent,
+IonButton, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
 import { useState, useEffect, useContext } from 'react';
@@ -10,12 +18,13 @@ import {
 import api from '../services/api.js'
 import { useHistory } from 'react-router-dom'
 import { AuthContext } from '../services/AuthContext.jsx'
+import { scanOutline, logOutOutline } from 'ionicons/icons'
 
 export default function Home() {
   const [QrResult, setQrResult] = useState(null);
   const [isSupported, setIsSupported] = useState(false)
   const history = useHistory();
-  const { logout } = useContext(AuthContext)
+  const { logout, user } = useContext(AuthContext)
   const [present, dismiss] = useIonLoading();
   const installGoogleBarcodeScanner = async () => {
     try {
@@ -107,13 +116,34 @@ export default function Home() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Capston Dustin</IonTitle>
+        <IonButtons slot="start">
+          <IonButton onClick={handleLogout}>
+            <IonIcon icon={logOutOutline} size='small'></IonIcon>
+          </IonButton>
+      </IonButtons>
+          {/*<IonTitle>Capston Dustin</IonTitle>*/}
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonButton onClick={() => startScan()} expand='block'>Scan</IonButton> 
-        <IonButton onClick={() => getRequest()} expand='block'>Get request test</IonButton> 
-        <IonButton onClick={() => handleLogout()} expand='block'>Logout</IonButton> 
+      <IonContent class='home-content'>
+        <IonCard style={{ padding: '1em' }}>
+          <IonCardContent class='profile-card'>
+            <div>
+              <IonText color='dark'>
+                <h4 class='hello-text'>Hello</h4>
+              </IonText>
+            <IonCardSubtitle style={{ marginTop: '5px' }}>Beadle, { user.name }</IonCardSubtitle>
+            </div>
+            <IonAvatar>
+              <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            </IonAvatar>
+          </IonCardContent>
+        </IonCard>
+
+        <IonCard class='button-card' onClick={() => startScan()}>
+            <IonIcon icon={scanOutline} size='large' class='icon'></IonIcon>
+          <IonCardSubtitle style={{ marginTop: '5px' }}>Scan QRCode</IonCardSubtitle>
+        </IonCard>
+
         { QrResult && JSON.stringify(QrResult)}
       </IonContent>
     </IonPage>

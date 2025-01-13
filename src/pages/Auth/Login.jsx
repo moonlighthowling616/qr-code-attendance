@@ -62,7 +62,7 @@ const LoginPage = () => {
                     <IonButton 
                       type='submit'
                       color='dark' 
-                      expand='block' 
+                      expand='block'
                       style={{ marginTop: '12px' }}>Sign In</IonButton>
                   </IonList>
                   </form>
