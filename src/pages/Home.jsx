@@ -1,7 +1,7 @@
-import { IonContent, IonButton, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useIonLoading, IonContent, IonButton, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   BarcodeScanner,
   BarcodeFormat,
@@ -9,12 +9,14 @@ import {
 } from '@capacitor-mlkit/barcode-scanning';
 import api from '../services/api.js'
 import { useHistory } from 'react-router-dom'
-
+import { AuthContext } from '../services/AuthContext.jsx'
 
 export default function Home() {
   const [QrResult, setQrResult] = useState(null);
   const [isSupported, setIsSupported] = useState(false)
   const history = useHistory();
+  const { logout } = useContext(AuthContext)
+  const [present, dismiss] = useIonLoading();
   const installGoogleBarcodeScanner = async () => {
     try {
       await BarcodeScanner.installGoogleBarcodeScannerModule();
@@ -89,20 +91,16 @@ export default function Home() {
   }
 
   const handleLogout = async () =>  {
-    const token = localStorage.getItem('auth_token');
     try {
-      await api.get('/sanctum/csrf-cookie')
-      const response = await api.post('/api/logout', {}, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      console.log(response)
-      localStorage.removeItem('auth_token');
+      present();
+      await logout();
+      dismiss();
       history.push('/')
     } catch(err) {
-      alert(err)
+      dismiss();
+      console.error(err)
     }
+
   }
 
   return (

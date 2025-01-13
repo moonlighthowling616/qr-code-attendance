@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useIonLoading, IonPage, IonContent, IonCard, IonRow, IonCol, IonCardContent, IonList, IonItem, IonInput, IonButton, IonInputPasswordToggle } from '@ionic/react';
-import api from '../../services/api.js'
 import { useHistory } from 'react-router-dom'
-
+import { AuthContext } from '../../services/AuthContext.jsx'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useContext(AuthContext)
   const history = useHistory();
   const [present, dismiss] = useIonLoading();
 
-  const handleLogin = async (e) => {  
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      present({ message: 'Logging in...'});
-      const response = await api.post('/api/login', { email, password });
-      console.log(response)
-      dismiss();
-      localStorage.setItem('auth_token', response.data.access_token);
+        present();
+      await login(email, password);
+        dismiss();
+
       history.push('/home')
-    } catch(err) {
-      dismiss();
-      console.error(err)
+    } catch (err) {
+        dismiss();
+
+      console.error(err);
     }
   };
 
@@ -36,7 +36,7 @@ const LoginPage = () => {
                 {/* Content */}
                 <IonCardContent>
                   {/* Form */}
-                  <form onSubmit={handleLogin}>
+                  <form onSubmit={handleSubmit}>
                   <IonList>
                     <IonItem>
                       <IonInput 
