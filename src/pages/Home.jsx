@@ -6,8 +6,9 @@ IonCardSubtitle ,
 IonText,
 IonIcon, IonContent, 
 IonCardContent,
+IonMenuButton,
+IonAlert,
 IonButton, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
 import { useState, useEffect, useContext } from 'react';
 import {
@@ -19,13 +20,18 @@ import api from '../services/api.js'
 import { useHistory } from 'react-router-dom'
 import { AuthContext } from '../services/AuthContext.jsx'
 import { scanOutline, logOutOutline } from 'ionicons/icons'
+import StudentLists from "../components/StudentLists.jsx"
 
 export default function Home() {
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState('');
   const [QrResult, setQrResult] = useState(null);
   const [isSupported, setIsSupported] = useState(false)
   const history = useHistory();
-  const { logout, user } = useContext(AuthContext)
+  // const { logout, user } = useContext(AuthContext)
   const [present, dismiss] = useIonLoading();
+
   const installGoogleBarcodeScanner = async () => {
     try {
       await BarcodeScanner.installGoogleBarcodeScannerModule();
@@ -69,14 +75,15 @@ export default function Home() {
       const { barcodes } = await BarcodeScanner.scan({
         formats: [BarcodeFormat.QrCode],
       });
-      alert(barcodes[0].rawValue)
 
       // Store QR in the database
       const response = await api.post('/api/attendance', {
         qrcode: barcodes[0].rawValue
       });
-
-      alert(JSON.stringify(response))
+      if (response.statusText === 'OK') {
+        setMessage(response.data.message)
+        setIsOpen(true)
+      }
 
     } catch(err) {
       alert(err)
@@ -112,18 +119,24 @@ export default function Home() {
 
   }
 
-  return (
+  return (<>
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-        <IonButtons slot="start">
-          <IonButton onClick={handleLogout}>
-            <IonIcon icon={logOutOutline} size='small'></IonIcon>
-          </IonButton>
-      </IonButtons>
-          {/*<IonTitle>Capston Dustin</IonTitle>*/}
-        </IonToolbar>
-      </IonHeader>
+          <IonToolbar>
+            {/* Menu Button */}
+            <IonButtons slot="start">
+              <IonMenuButton></IonMenuButton>
+            </IonButtons>
+            <IonTitle></IonTitle>
+
+            {/* Logout Button */}
+            {/*<IonButtons slot="end">
+              <IonButton onClick={handleLogout}>
+                <IonIcon icon={logOutOutline} size="small"></IonIcon>
+              </IonButton>
+            </IonButtons>*/}
+          </IonToolbar>
+        </IonHeader>
       <IonContent class='home-content'>
         <IonCard style={{ padding: '1em' }}>
           <IonCardContent class='profile-card'>
@@ -131,22 +144,38 @@ export default function Home() {
               <IonText color='dark'>
                 <h4 class='hello-text'>Hello</h4>
               </IonText>
-            <IonCardSubtitle style={{ marginTop: '5px' }}>Beadle, { user.name }</IonCardSubtitle>
+            <IonCardSubtitle style={{ marginTop: '5px' }}>Beadle</IonCardSubtitle>
             </div>
             <IonAvatar>
               <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
             </IonAvatar>
           </IonCardContent>
         </IonCard>
-
-        <IonCard class='button-card' onClick={() => startScan()}>
+          <IonAlert
+            isOpen={isOpen}
+            header="Success"
+            // subHeader="A Sub Header Is Optional"
+            message={`${message}`}
+            buttons={['Close']}
+            onDidDismiss={() => setIsOpen(false)}
+          ></IonAlert>
+       {/* <IonCard class='button-card' onClick={() => startScan()}>
             <IonIcon icon={scanOutline} size='large' class='icon'></IonIcon>
           <IonCardSubtitle style={{ marginTop: '5px' }}>Scan QRCode</IonCardSubtitle>
-        </IonCard>
+        </IonCard>*/}
+
+          <StudentLists/>
+          <StudentLists/>
+          <StudentLists/>
+          <StudentLists/>
+          <StudentLists/>
+          
+
 
         { QrResult && JSON.stringify(QrResult)}
       </IonContent>
     </IonPage>
+    </>
     );
 };
 
