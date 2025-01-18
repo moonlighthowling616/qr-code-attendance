@@ -8,7 +8,7 @@ import {
 	IonFab,
 	IonFabButton,
 	IonIcon,
-	useIonLoading
+	IonLoading
 } from '@ionic/react'
 import { scan } from 'ionicons/icons';
 import StudentLists from "../components/StudentLists.jsx"
@@ -19,18 +19,18 @@ import { ScannerContext } from '../services/ScannerContext.jsx'
 
 export default function Attendances() {
 	const [attendances, setAttendances] = useState([]);
-	const [present, dismiss] = useIonLoading();
+	const [loading, setLoading] = useState(false);
 	const { recorded } = useContext(ScannerContext)
 	useEffect(() => {
 		const fetchAttendances = async() => {
 			try {
-				present()
+				setLoading(true);
 				const { data } = await api.get('/api/attendance')
 				setAttendances(data.attendances)
-				dismiss()
-			} catch(err) {
-				dismiss()
+			} catch (err) {
 				alert(err)
+			} finally {
+				setLoading(false);
 			}
 		}
 		fetchAttendances()
@@ -55,9 +55,10 @@ export default function Attendances() {
 		</IonFab>
 		<Scanner attendances={attendances} setAttendances={setAttendances} />
 		{ attendances?.length > 0 ? (attendances.map((attendance) => 
-			<StudentLists student={attendance.student}/>)) 
+			<StudentLists key={attendance.student} student={attendance.student}/>)) 
 		: '' 
 		}
+		<IonLoading isOpen={loading} message="Loading..." />
       </IonContent>
     </IonPage>
     </>
