@@ -1,14 +1,21 @@
-import { useIonLoading, 
-IonAvatar, 
-IonButtons, 
-IonCard, 
-IonCardSubtitle , 
-IonText,
-IonIcon, IonContent, 
-IonCardContent,
-IonMenuButton,
-IonAlert,
-IonButton, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { 
+  useIonLoading, 
+  IonAvatar, 
+  IonButtons, 
+  IonCard, 
+  IonCardSubtitle , 
+  IonText,
+  IonIcon, IonContent, 
+  IonCardContent,
+  IonMenuButton,
+  IonAlert,
+  IonLabel,
+  IonButton,
+  IonHeader,
+  IonPage, 
+  IonTitle, 
+  IonToolbar
+} from '@ionic/react';
 import './Home.css';
 import { useState, useEffect, useContext } from 'react';
 import {
@@ -128,13 +135,6 @@ export default function Home() {
               <IonMenuButton></IonMenuButton>
             </IonButtons>
             <IonTitle></IonTitle>
-
-            {/* Logout Button */}
-            {/*<IonButtons slot="end">
-              <IonButton onClick={handleLogout}>
-                <IonIcon icon={logOutOutline} size="small"></IonIcon>
-              </IonButton>
-            </IonButtons>*/}
           </IonToolbar>
         </IonHeader>
       <IonContent class='home-content'>
@@ -154,15 +154,11 @@ export default function Home() {
           <IonAlert
             isOpen={isOpen}
             header="Success"
-            // subHeader="A Sub Header Is Optional"
             message={`${message}`}
             buttons={['Close']}
             onDidDismiss={() => setIsOpen(false)}
           ></IonAlert>
-       {/* <IonCard class='button-card' onClick={() => startScan()}>
-            <IonIcon icon={scanOutline} size='large' class='icon'></IonIcon>
-          <IonCardSubtitle style={{ marginTop: '5px' }}>Scan QRCode</IonCardSubtitle>
-        </IonCard>*/}
+          <IonLabel style={{ marginLeft: '12px' }} color='medium'>Today {}</IonLabel>
 
           <StudentLists/>
           <StudentLists/>

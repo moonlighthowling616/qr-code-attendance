@@ -4,9 +4,7 @@ import { IonApp, setupIonicReact, IonTabs, IonTabBar, IonTabButton, IonIcon, Ion
 
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home.jsx';
-import Login from './pages/Auth/Login.jsx'
-import { useContext } from 'react'
-import { AuthContext } from './services/AuthContext.jsx'
+import Attendances from './pages/Attendances.jsx';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -24,7 +22,7 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
 /* Ionic icons */
-import { home, bookmark } from 'ionicons/icons';
+import { home, layers } from 'ionicons/icons';
 /** 
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -41,59 +39,34 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-const App: React.FC = () => {
-  const { isAuthed } = useContext(AuthContext)
-  console.log(isAuthed)
-  return (<IonApp>
-    <IonReactRouter>
-    <IonTabs mode='ios'>
-        <IonRouterOutlet>
-          <Redirect exact path="/" to="/home" />
-          <Route path="/home" render={() => <Home />} exact={true} />
-          <Redirect exact path="/attendances" to="/home" />
- 
-          {/*
-          Use the render method to reduce the number of renders your component will have due to a route change.
+const App = () => {
+  return (
+    // <IonApp>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Redirect exact path="/" to="/home" />
+            
+            {/* Routes for each tab */}
+            <Route path="/home" render={() => <Home />} exact={true}/>
+            <Route path="/attendances" render={() => <Attendances />} exact={true}/>
+          </IonRouterOutlet>
 
-          Use the component prop when your component depends on the RouterComponentProps passed in automatically.
-        */}
-        </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="home" href="/home">
+              <IonIcon icon={home} size="large" />
+              <IonLabel style={{ fontSize: '1.2em' }}>Home</IonLabel>
+            </IonTabButton>
 
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="home" href="/home">
-            <IonIcon icon={home} size='large'/>
-            <IonLabel style={{ fontSize: '1.2em'}} type='ios'>Home</IonLabel>
-          </IonTabButton>
-
-          <IonTabButton tab="attendances" href="/attendances">
-            <IonIcon icon={bookmark} size='large'/>
-            <IonLabel style={{ fontSize: '1.3em'}} type='ios'>Records</IonLabel>
-          </IonTabButton>
-
-
-        </IonTabBar>
-
-
-
-      </IonTabs>
-      <IonRouterOutlet>
-      {/*Home Route*/}
-        
-
-        {/*{ isAuthed ? (<>
-          <Route exact path="/home">
-            <Home />
-          </Route>
-        </>) : ( 
-          <Redirect to="/" />
-        )}
-
-        <Route exact path="/">
-         { isAuthed ?  <Redirect to="/home" /> : <Login/>}
-        </Route>*/}
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>)
+            <IonTabButton tab="attendances" href="/attendances">
+              <IonIcon icon={layers} size="large" />
+              <IonLabel style={{ fontSize: '1.3em' }}>Records</IonLabel>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    // </IonApp>
+  );
 };
 
 export default App;
