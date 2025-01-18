@@ -8,7 +8,10 @@ import {
 	IonFab,
 	IonFabButton,
 	IonIcon,
-	IonLoading
+	IonLoading,
+	IonDatetime,
+	IonDatetimeButton,
+	IonModal
 } from '@ionic/react'
 import { scan } from 'ionicons/icons';
 import StudentLists from "../components/StudentLists.jsx"
@@ -21,11 +24,12 @@ export default function Attendances() {
 	const [attendances, setAttendances] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const { recorded } = useContext(ScannerContext)
+
 	useEffect(() => {
 		const fetchAttendances = async() => {
 			try {
 				setLoading(true);
-				const { data } = await api.get('/api/attendance')
+				const { data } = await api.get('/api/presents-today')
 				setAttendances(data.attendances)
 			} catch (err) {
 				alert(err)
@@ -36,6 +40,18 @@ export default function Attendances() {
 		fetchAttendances()
 	}, [recorded])
 
+	const handleDateChange = async(e) => {
+		try {
+			setLoading(true);
+			const { data } = await api.post('/api/date-filter', { date: e.detail.value })
+			setAttendances(data.attendances)
+		} catch (err) {
+			alert(err)
+		} finally {
+			setLoading(false);
+		}
+
+	}
 
   return (<>
     <IonPage>
@@ -48,6 +64,15 @@ export default function Attendances() {
           </IonToolbar>
         </IonHeader>
       <IonContent class='home-content'>
+	    
+	    <IonDatetimeButton style={{ marginTop: '.5em'}}datetime="datetime" mode='ios'></IonDatetimeButton>
+	    <IonModal keepContentsMounted={true}>
+	        <IonDatetime 
+	        	id="datetime" 
+	        	presentation='date'
+	        	onIonChange={handleDateChange}
+	        ></IonDatetime>
+	    </IonModal>
 	    <IonFab slot="fixed" horizontal="center" vertical="bottom">
 		    <IonFabButton>
 		    	<IonIcon icon={scan}></IonIcon>
@@ -55,7 +80,7 @@ export default function Attendances() {
 		</IonFab>
 		<Scanner attendances={attendances} setAttendances={setAttendances} />
 		{ attendances?.length > 0 ? (attendances.map((attendance) => 
-			<StudentLists key={attendance.student} student={attendance.student}/>)) 
+			<StudentLists key={attendance.student} student={attendance.student} time={attendance.time_in}/>)) 
 		: '' 
 		}
 		<IonLoading isOpen={loading} message="Loading..." />
