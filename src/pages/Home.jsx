@@ -102,29 +102,6 @@ export default function Home() {
     return camera == 'granted' || camera == 'limited';
   };
 
-  const getRequest = async () => {
-    try {
-      // await api.get('/sanctum/csrf-cookie')
-      const response = await api.get('/api/attendance');
-      alert(JSON.stringify(response))
-      console.log(response)
-    } catch(err) {
-      alert(err)
-    }
-  }
-
-  const handleLogout = async () =>  {
-    try {
-      present();
-      await logout();
-      dismiss();
-      history.push('/')
-    } catch(err) {
-      dismiss();
-      console.error(err)
-    }
-
-  }
 
   return (<>
     <IonPage>
@@ -158,7 +135,7 @@ export default function Home() {
             buttons={['Close']}
             onDidDismiss={() => setIsOpen(false)}
           ></IonAlert>
-          <IonLabel style={{ marginLeft: '12px' }} color='medium'>Today {}</IonLabel>
+          <IonLabel style={{ marginLeft: '12px' }} color='medium'>Present today {}</IonLabel>
 
           <StudentLists/>
           <StudentLists/>

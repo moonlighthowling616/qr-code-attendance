@@ -1,23 +1,17 @@
 import { 
-  useIonLoading, 
-  IonAvatar, 
-  IonButtons, 
-  IonCard, 
-  IonCardSubtitle , 
-  IonText,
-  IonIcon, IonContent, 
-  IonCardContent,
-  IonMenuButton,
-  IonAlert,
-  IonLabel,
-  IonButton,
-  IonHeader,
-  IonPage, 
-  IonTitle, 
-  IonToolbar
-} from '@ionic/react';
+	IonPage,
+	IonHeader, 
+	IonToolbar, 
+	IonButtons, 
+	IonMenuButton, 
+	IonContent,
+	IonFab,
+	IonFabButton,
+	IonIcon
+} from '@ionic/react'
+import { scan } from 'ionicons/icons';
 import StudentLists from "../components/StudentLists.jsx"
-
+import Scanner from '../components/Scanner.jsx'
 export default function Attendances() {
 
   return (<>
@@ -28,17 +22,19 @@ export default function Attendances() {
             <IonButtons slot="start">
               <IonMenuButton></IonMenuButton>
             </IonButtons>
-            <IonTitle></IonTitle>
           </IonToolbar>
         </IonHeader>
       <IonContent class='home-content'>
-          <StudentLists/>
-          <StudentLists/>
-          <StudentLists/>
-          <StudentLists/>
-          <StudentLists/>
-          
-
+	    <IonFab slot="fixed" horizontal="center" vertical="bottom">
+		    <IonFabButton>
+		    	<IonIcon icon={scan}></IonIcon>
+		    </IonFabButton>
+		</IonFab>
+		<Scanner />
+		<StudentLists/>
+		<StudentLists/>
+		<StudentLists/>
+		<StudentLists/>
 
       </IonContent>
     </IonPage>
