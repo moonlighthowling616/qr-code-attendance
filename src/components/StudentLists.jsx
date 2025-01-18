@@ -1,14 +1,14 @@
 import React from 'react';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 
-function StudentLists() {
+function StudentLists({ student }) {
   return (
     <IonCard>
       <IonCardHeader>
-        <IonCardTitle>Kim Minji</IonCardTitle>
+        <IonCardTitle>{ student }</IonCardTitle>
         <IonCardSubtitle>Student</IonCardSubtitle>
       </IonCardHeader>
-      <IonCardContent>Status: </IonCardContent>
+      <IonCardContent>Status: Present </IonCardContent>
     </IonCard>
   );
 }
