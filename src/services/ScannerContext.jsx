@@ -44,17 +44,16 @@ export default function ScannerProvider({ children }) {
 
 
 			const response = await api.post('/api/attendance', {
-				student: barcodes[0].rawValue
+				id_number: barcodes[0].rawValue
 			});
-
+			alert(JSON.stringify(response))
 			if (response.status == 200) {
 				setRecorded(!recorded)
 				setIsOpen(true)
 			}
 
 		} catch(err) {
-			alert('Something went wrong here.')
-			alert(JSON.stringify(err))
+			alert(err.response?.data.error)
 		}
 	};
 
@@ -63,8 +62,9 @@ export default function ScannerProvider({ children }) {
 		return camera == 'granted' || camera == 'limited';
 	};
 
+
 	return (<>
-		<ScannerContext.Provider value={{startScan, isOpen, recorded}}>
+		<ScannerContext.Provider value={{startScan, isOpen, recorded, setRecorded }}>
 			{ children }
 		</ScannerContext.Provider>
 

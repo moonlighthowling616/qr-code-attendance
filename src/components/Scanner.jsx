@@ -17,11 +17,10 @@ import { ScannerContext } from '../services/ScannerContext.jsx'
 export default function Scanner({ setAttendances }) {
   const [QrResult, setQrResult] = useState(null);
   const [isSupported, setIsSupported] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
-  const { startScan } = useContext(ScannerContext)
+  const { startScan, isOpen } = useContext(ScannerContext)
 
   return (<>
-      <IonFab onClick={startScan} slot="fixed" horizontal="center" vertical="bottom">
+      <IonFab onClick={startScan} slot="fixed" horizontal="end" vertical="bottom">
           <IonFabButton>
             <IonIcon icon={scan}></IonIcon>
           </IonFabButton>
@@ -29,7 +28,8 @@ export default function Scanner({ setAttendances }) {
 
       <IonToast
         isOpen={isOpen}
-        trigger="open-toast"
+        position='bottom'
+        positionAnchor='footer'
         message="Attendance recorded."
         duration={3000}
       ></IonToast>

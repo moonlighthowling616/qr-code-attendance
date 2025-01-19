@@ -31,6 +31,7 @@ export default function Attendances() {
 				setLoading(true);
 				const { data } = await api.get('/api/presents-today')
 				setAttendances(data.attendances)
+				console.log(data.attendances)
 			} catch (err) {
 				alert(err)
 			} finally {
@@ -63,7 +64,7 @@ export default function Attendances() {
             </IonButtons>
           </IonToolbar>
         </IonHeader>
-      <IonContent class='home-content'>
+      <IonContent class='home-content ion-padding'>
 	    
 	    <IonDatetimeButton style={{ marginTop: '.5em'}}datetime="datetime" mode='ios'></IonDatetimeButton>
 	    <IonModal keepContentsMounted={true}>
@@ -73,17 +74,13 @@ export default function Attendances() {
 	        	onIonChange={handleDateChange}
 	        ></IonDatetime>
 	    </IonModal>
-	    <IonFab slot="fixed" horizontal="center" vertical="bottom">
-		    <IonFabButton>
-		    	<IonIcon icon={scan}></IonIcon>
-		    </IonFabButton>
-		</IonFab>
 		<Scanner attendances={attendances} setAttendances={setAttendances} />
 		{ attendances?.length > 0 ? (attendances.map((attendance) => 
-			<StudentLists key={attendance.student} student={attendance.student} time={attendance.time_in}/>)) 
+			<StudentLists key={attendance.id} student={attendance.student.name} time={attendance.time_in}/>)) 
 		: '' 
 		}
-		<IonLoading isOpen={loading} message="Loading..." />
+		<IonLoading 
+		isOpen={loading}/>
       </IonContent>
     </IonPage>
     </>

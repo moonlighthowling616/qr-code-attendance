@@ -11,16 +11,29 @@ import {
   IonHeader, 
   IonPage, 
   IonTitle, 
-  IonToolbar
+  IonToolbar,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonRouterLink,
+  IonCardHeader,
+  IonCardTitle,
+  IonButton
 } from '@ionic/react';
 import { useState, useEffect, useContext } from 'react';
 import StudentLists from "../components/StudentLists.jsx";
 import api from '../services/api.js';
 import { ScannerContext } from '../services/ScannerContext.jsx';
-
-
+import { 
+  add, 
+  personAddOutline, 
+  people,
+  createOutline,
+  trashOutline
+} from 'ionicons/icons';
+import './Home.css'
 export default function Home() {
-  const [attendances, setAttendances] = useState([]);
+  const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const { recorded } = useContext(ScannerContext)
 
@@ -28,8 +41,8 @@ export default function Home() {
     const fetchAttendances = async() => {
       try {
         setLoading(true);
-        const { data } = await api.get('/api/presents-today')
-        setAttendances(data.attendances)
+        const { data } = await api.get('/api/student')
+        setStudents(data.students)
       } catch (err) {
         alert(err)
       } finally {
@@ -39,6 +52,9 @@ export default function Home() {
     fetchAttendances()
   }, [recorded])
 
+  const closeModal = () => {
+    console.log('close')
+  }
 
   return (<>
     <IonPage>
@@ -47,30 +63,55 @@ export default function Home() {
             {/* Menu Button */}
           </IonToolbar>
         </IonHeader>
-      <IonContent class='home-content'>
+      <IonContent className='ion-padding'>
         <IonCard style={{ padding: '1em' }}>
-          <IonCardContent class='profile-card'>
+          <IonCardContent className='profile-card'>
             <div>
-             {/* <IonText color='dark'>
-                <h4 class='hello-text'>Hello</h4>
+              <IonText color='dark' style={{ display: 'flex', alignItems: 'center', gap: '1.5em'}}>
+                <IonIcon size='large' icon={people}></IonIcon>
+                <h2 className='hello-text'>Classmates</h2>
               </IonText>
-            <IonCardSubtitle style={{ marginTop: '5px' }}>Beadle</IonCardSubtitle>
+            <IonCardSubtitle style={{ marginTop: '5px' }}>Total: {students?.length > 0 ? students.length : 'No student available.'}</IonCardSubtitle>
             </div>
-            <IonAvatar>
-              <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-            </IonAvatar>*/}
+            <div>
+            {/*<IonAvatar>*/}
+              {/*<img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />*/}
+            {/*</IonAvatar>*/}
             </div>
-          <IonLabel style={{ padding: '12px' }} color='medium'>Present today</IonLabel>
+          {/*<IonLabel style={{ padding: '12px' }} color='medium'>Classmates records</IonLabel>*/}
           </IonCardContent>
         </IonCard>
-          { attendances?.length > 0 ? (attendances.map((attendance) => 
-            <StudentLists key={attendance.student} student={attendance.student} time={attendance.time_in}/>)) 
-          : '' 
-          }   
-          <IonLoading isOpen={loading} message="Loading..." />
+           <IonFab  slot="fixed" horizontal="end" vertical="bottom">
+              <IonRouterLink routerLink='/add-student'>
+              <IonFabButton>
+                <IonIcon icon={personAddOutline}></IonIcon>
+              </IonFabButton>
+              </IonRouterLink>
+          </IonFab>
+          {students?.length > 0 ? (
+            students.map((student) => (
+              <IonCard key={student.id}> {/* Use a unique key for each student */}
+                <IonCardHeader>
+                  <IonCardTitle>{student.name}</IonCardTitle>
+                  {/*<IonCardSubtitle>{time}</IonCardSubtitle>*/}
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonButton routerLink={`edit/${student.id}`} color='secondary'>
+                    <IonIcon icon={createOutline}/>
+                  </IonButton>
+                  <IonButton color='danger'><IonIcon icon={trashOutline}/></IonButton>
+                </IonCardContent>
+              </IonCard>
+            ))
+          ) : (
+            <p>No students available</p> // Optional message when there are no students
+          )}
+
+          <IonLoading isOpen={loading} message="" />
 
       </IonContent>
     </IonPage>
+    {/* Add student modal*/}
     </>
     );
 };
