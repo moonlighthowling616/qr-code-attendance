@@ -11,7 +11,8 @@ import {
 	IonLoading,
 	IonDatetime,
 	IonDatetimeButton,
-	IonModal
+	IonModal,
+	IonToast,
 } from '@ionic/react'
 import { scan } from 'ionicons/icons';
 import StudentLists from "../components/StudentLists.jsx"
@@ -21,17 +22,21 @@ import api from '../services/api.js'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 
 export default function Attendances() {
-	const [attendances, setAttendances] = useState([]);
+	const [presents, setPresents] = useState([]);
+	const [absents, setAbsents] = useState();
 	const [loading, setLoading] = useState(false);
-	const { recorded } = useContext(ScannerContext)
-
+	const { scanned, toastOpen, setToastOpen } = useContext(ScannerContext)
 	useEffect(() => {
 		const fetchAttendances = async() => {
 			try {
 				setLoading(true);
-				const { data } = await api.get('/api/presents-today')
-				setAttendances(data.attendances)
-				console.log(data.attendances)
+				const presents_response = await api.get('/api/presents-today')
+				const absents_response  = await api.get('/api/absents-today')
+				setPresents(presents_response.data.attendances)
+				setAbsents(absents_response.data.absentees)
+				console.log(presents_response.data.attendances)
+				console.log(absents_response.data.absentees)
+
 			} catch (err) {
 				alert(err)
 			} finally {
@@ -39,7 +44,7 @@ export default function Attendances() {
 			}
 		}
 		fetchAttendances()
-	}, [recorded])
+	}, [scanned])
 
 	const handleDateChange = async(e) => {
 		try {
@@ -51,7 +56,6 @@ export default function Attendances() {
 		} finally {
 			setLoading(false);
 		}
-
 	}
 
   return (<>
@@ -74,13 +78,25 @@ export default function Attendances() {
 	        	onIonChange={handleDateChange}
 	        ></IonDatetime>
 	    </IonModal>
-		<Scanner attendances={attendances} setAttendances={setAttendances} />
-		{ attendances?.length > 0 ? (attendances.map((attendance) => 
-			<StudentLists key={attendance.id} student={attendance.student.name} time={attendance.time_in}/>)) 
+		<Scanner />
+		{ presents?.length > 0 ? (presents.map((present) => 
+			<StudentLists key={present.id} student={present.student.name} time={present.time_in}/>)) 
+		: '' 
+		}
+		{ absents?.length > 0 ? (absents.map((absent) => 
+			<StudentLists key={absent.id} student={absent.name} />)) 
 		: '' 
 		}
 		<IonLoading 
 		isOpen={loading}/>
+		<IonToast
+          isOpen={toastOpen}
+          position="top"
+          // positionAnchor="footer"
+          message="Attendance recorded."
+          onDidDismiss={() => setToastOpen(false)}
+          duration={3000}
+     ></IonToast>
       </IonContent>
     </IonPage>
     </>

@@ -93,7 +93,7 @@ export default function Home() {
               <IonCard key={student.id}> {/* Use a unique key for each student */}
                 <IonCardHeader>
                   <IonCardTitle>{student.name}</IonCardTitle>
-                  {/*<IonCardSubtitle>{time}</IonCardSubtitle>*/}
+                  <IonCardSubtitle>{student.id_number}</IonCardSubtitle>
                 </IonCardHeader>
                 <IonCardContent>
                   <IonButton routerLink={`edit/${student.id}`} color='secondary'>

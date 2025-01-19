@@ -56,7 +56,7 @@ const App = () => {
             <Route path="/edit/:id" render={() => <EditStudent />} exact={true}/>
           </IonRouterOutlet>
 
-          <IonTabBar slot="bottom">
+          <IonTabBar slot="bottom" id='footer'>
             <IonTabButton tab="home" href="/home">
               <IonIcon icon={home} size="" />
               <IonLabel>Home</IonLabel>

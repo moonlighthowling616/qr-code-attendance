@@ -13,6 +13,7 @@ import {
 } from '@ionic/react'
 import api from '../services/api.js'
 import { useHistory } from 'react-router-dom'
+import { ScannerContext } from '../services/ScannerContext.jsx'
 
 export default function AddStudent() {
   const history = useHistory(); 
@@ -20,6 +21,8 @@ export default function AddStudent() {
   const [idNumber, setIdNumber] = useState('');
   const [strand, setStrand] = useState('');
   const [loading, setLoading] = useState(false);
+  const { recorded, setRecorded } = useContext(ScannerContext)
+
   const handleSubmit = async() => {
     try {
       setLoading(true)
@@ -29,13 +32,14 @@ export default function AddStudent() {
         strand: strand
       });
 
-      history.push('/home');
 
 
     } catch(err) {
       console.log(err)
       alert("Something went wrong, please check if all fields are filled.")
     } finally {
+      setRecorded(!recorded)
+      history.push('/home');
       setLoading(false)
     }
 

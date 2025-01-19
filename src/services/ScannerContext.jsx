@@ -10,8 +10,10 @@ import api from './api.js'
 export const ScannerContext = createContext();
 export default function ScannerProvider({ children }) {
 	const [recorded, setRecorded] = useState(false);
+	const [scanned, setScanned] = useState(false);
 	const [isSupported, setIsSupported] = useState(false)
 	const [isOpen, setIsOpen] = useState(false)
+	const [toastOpen, setToastOpen] = useState(false);
 
 	useEffect(() => {
 		const check = async () => {
@@ -46,9 +48,9 @@ export default function ScannerProvider({ children }) {
 			const response = await api.post('/api/attendance', {
 				id_number: barcodes[0].rawValue
 			});
-			alert(JSON.stringify(response))
 			if (response.status == 200) {
-				setRecorded(!recorded)
+				setToastOpen(true)
+				setScanned(!scanned)
 				setIsOpen(true)
 			}
 
@@ -57,6 +59,7 @@ export default function ScannerProvider({ children }) {
 		}
 	};
 
+
 	const requestPermissions = async () => {
 		const { camera } = await BarcodeScanner.requestPermissions();
 		return camera == 'granted' || camera == 'limited';
@@ -64,7 +67,7 @@ export default function ScannerProvider({ children }) {
 
 
 	return (<>
-		<ScannerContext.Provider value={{startScan, isOpen, recorded, setRecorded }}>
+		<ScannerContext.Provider value={{startScan, isOpen, recorded, scanned, setRecorded, setToastOpen, toastOpen }}>
 			{ children }
 		</ScannerContext.Provider>
 

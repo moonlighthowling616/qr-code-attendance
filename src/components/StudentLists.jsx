@@ -3,14 +3,16 @@ import { IonText, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCa
 
 function StudentLists({ student, time }) {
   return (
-    <IonCard>
+    <IonCard >
       <IonCardHeader>
         <IonCardTitle>{ student }</IonCardTitle>
-        <IonCardSubtitle>{ time }</IonCardSubtitle>
+        {time && 
+          <IonCardSubtitle>{ time }</IonCardSubtitle>
+        }
       </IonCardHeader>
       <IonCardContent>
-        <IonText color="success">
-          <p>Present</p>
+        <IonText color={`${time ? 'success' : 'danger'}`}>
+          <p>{ time ? 'Present' : 'Absent / Not marked yet'}</p>
         </IonText>
       </IonCardContent>
     </IonCard>

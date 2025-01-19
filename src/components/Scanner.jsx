@@ -14,7 +14,7 @@ import { scan } from 'ionicons/icons';
 import api from '../services/api.js'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 
-export default function Scanner({ setAttendances }) {
+export default function Scanner() {
   const [QrResult, setQrResult] = useState(null);
   const [isSupported, setIsSupported] = useState(false)
   const { startScan, isOpen } = useContext(ScannerContext)
