@@ -12,7 +12,7 @@ import {
   IonLoading
 } from '@ionic/react'
 import api from '../services/api.js'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 
 export default function AddStudent() {
@@ -21,7 +21,7 @@ export default function AddStudent() {
   const [strand, setStrand] = useState('');
   const [loading, setLoading] = useState(false)
   const { id } = useParams();
-  const navigate = useNavigate();
+  const history = useHistory();
   const { recorded, setRecorded } = useContext(ScannerContext)
   // const { recorded } = useContext(ScannerContext)
 
@@ -56,7 +56,7 @@ export default function AddStudent() {
         strand: strand
       });
 
-      navigate('/home');
+      history.push('/home');
 
     } catch(err) {
       console.log(err)

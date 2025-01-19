@@ -8,30 +8,36 @@ import {
   IonInput,
   IonItem,
   IonList,
-  IonText
+  IonText,
+  IonLoading
 } from '@ionic/react'
 import api from '../services/api.js'
+import { useHistory } from 'react-router-dom'
 
-export default function AddStudent({ isOpen, closeModal }) {
+export default function AddStudent() {
+  const history = useHistory(); 
   const [name, setName] = useState('');
   const [idNumber, setIdNumber] = useState('');
   const [strand, setStrand] = useState('');
-
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async() => {
     try {
+      setLoading(true)
       const response = await api.post('/api/student', {
         name: name,
         id_number: idNumber,
         strand: strand
       });
 
-      console.log(response)
+      history.push('/home');
 
 
     } catch(err) {
       console.log(err)
       alert("Something went wrong, please check if all fields are filled.")
-    } 
+    } finally {
+      setLoading(false)
+    }
 
 
   }
@@ -67,6 +73,7 @@ export default function AddStudent({ isOpen, closeModal }) {
                 />
               <IonButton onClick={handleSubmit} expand='block' color='dark'>Submit</IonButton>
           </div>
+          <IonLoading isOpen={loading} message="" />
         </IonContent>
       </IonPage>
   	</>
