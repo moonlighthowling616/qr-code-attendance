@@ -12,7 +12,7 @@ function StudentLists({ student, time }) {
       </IonCardHeader>
       <IonCardContent>
         <IonText color={`${time ? 'success' : 'danger'}`}>
-          <p>{ time ? 'Present' : 'Absent / Not marked yet'}</p>
+          <p>{ time ? 'Present' : 'Absent / not marked yet.'}</p>
         </IonText>
       </IonCardContent>
     </IonCard>

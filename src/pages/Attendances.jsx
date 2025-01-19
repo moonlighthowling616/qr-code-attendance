@@ -49,10 +49,15 @@ export default function Attendances() {
 	const handleDateChange = async(e) => {
 		try {
 			setLoading(true);
-			const { data } = await api.post('/api/date-filter', { date: e.detail.value })
-			setAttendances(data.attendances)
+			const presents_response = await api.post('/api/date-present-filter', { date: e.detail.value })
+			const absents_response = await api.post('/api/date-absent-filter', { date: e.detail.value })
+			setPresents(presents_response.data.attendances)
+			setAbsents(absents_response.data.attendances)
+			console.log('absent', absents_response)
+			console.log(presents_response)
 		} catch (err) {
 			alert(err)
+			console.log(err)
 		} finally {
 			setLoading(false);
 		}
@@ -79,13 +84,11 @@ export default function Attendances() {
 	        ></IonDatetime>
 	    </IonModal>
 		<Scanner />
-		{ presents?.length > 0 ? (presents.map((present) => 
+		{ presents?.length > 0 && (presents.map((present) => 
 			<StudentLists key={present.id} student={present.student.name} time={present.time_in}/>)) 
-		: '' 
 		}
-		{ absents?.length > 0 ? (absents.map((absent) => 
+		{ absents?.length > 0 && (absents.map((absent) => 
 			<StudentLists key={absent.id} student={absent.name} />)) 
-		: '' 
 		}
 		<IonLoading 
 		isOpen={loading}/>
