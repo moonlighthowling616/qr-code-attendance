@@ -110,7 +110,7 @@ export default function Home() {
           </IonFab>
           {students?.length > 0 ? (
             students.map((student) => (
-              <IonCard key={student.id}> 
+              <IonCard key={student.id}>
                 <IonCardHeader>
                   <IonCardTitle>{student.name}</IonCardTitle>
                   <IonCardSubtitle>{student.id_number}</IonCardSubtitle>

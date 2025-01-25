@@ -28,7 +28,6 @@ export const initdb = async () => {
 
     // open the database
     await database.open();
-
     // Define and create the table
     await database.execute(`
       CREATE TABLE IF NOT EXISTS students (
@@ -40,8 +39,8 @@ export const initdb = async () => {
     `);
 
     await database.execute(`
-      CREATE TABLE IF NOT EXISTS attendances (
-        id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+      CREATE TABLE attendances (
+        id INTEGER PRIMARY KEY NOT NULL,
         student_id INTEGER NOT NULL,
         day DATE NOT NULL,
         time_in TIME NOT NULL,
@@ -49,6 +48,7 @@ export const initdb = async () => {
         FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
     );
     `);
+
 
     // Insert initial data
     // await database.execute(`
@@ -132,26 +132,26 @@ export const queryAllAttendances = async () => {
   await database.open();
 
   // query to get all of the contacts from database
+  return database.query('SELECT *  FROM attendances');
 
-
-  return database.query( `
-    SELECT 
-      attendances.id AS attendance_id,
-      attendances.student_id,
-      attendances.day,
-      attendances.time_in,
-      attendances.remarks,
-      students.id AS student_id,
-      students.name AS student_name,
-      students.strand AS student_strand,
-      students.id_number AS student_id_number
-    FROM 
-      attendances
-    JOIN 
-      students 
-    ON 
-      attendances.student_id = students.id;` 
-    );
+  // return database.query( `
+  //   SELECT 
+  //     attendances.id AS attendance_id,
+  //     attendances.student_id,
+  //     attendances.day,
+  //     attendances.time_in,
+  //     attendances.remarks,
+  //     students.id AS student_id,
+  //     students.name AS student_name,
+  //     students.strand AS student_strand,
+  //     students.id_number AS student_id_number
+  //   FROM 
+  //     attendances
+  //   JOIN 
+  //     students 
+  //   ON 
+  //     attendances.student_id = students.id;` 
+  //   );
 };
 
 
