@@ -18,12 +18,16 @@ import { scan } from 'ionicons/icons';
 import StudentLists from "../components/StudentLists.jsx"
 import Scanner from '../components/Scanner.jsx'
 import { useEffect, useState, useContext } from 'react'
-import api from '../services/api.js'
-import { queryAllAttendances } from '../dataservice.tsx'
+import { 
+	queryAllPresents, 
+	queryAllAbsents,
+	filterPresentAttendances,
+	filterAbsentAttendances
+	} from '../dataservice.tsx'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 
 export default function Attendances() {
-	const [presents, setPresents] = useState([]);
+	const [presents, setPresents] = useState();
 	const [absents, setAbsents] = useState();
 	const [loading, setLoading] = useState(false);
 	const { scanned, toastOpen, setToastOpen } = useContext(ScannerContext)
@@ -32,12 +36,12 @@ export default function Attendances() {
 		const fetchAttendances = async() => {
 			try {
 				setLoading(true);
-				const attendances = await queryAllAttendances();
-					alert(JSON.stringify(attendances))
+				const get_presents = await queryAllPresents();
+				const get_absents = await queryAllAbsents();
 				// const presents_response = await api.get('/api/presents-today')
 				// const absents_response  = await api.get('/api/absents-today')
-				// setPresents(presents_response.data.attendances)
-				// setAbsents(absents_response.data.absentees)
+				setPresents(get_presents.values)
+				setAbsents(get_absents.values)
 				// console.log(presents_response.data.attendances)
 				// console.log(absents_response.data.absentees)
 
@@ -50,22 +54,30 @@ export default function Attendances() {
 		fetchAttendances()
 	}, [scanned])
 
-	// const handleDateChange = async(e) => {
-	// 	try {
-	// 		setLoading(true);
-	// 		const presents_response = await api.post('/api/date-present-filter', { date: e.detail.value })
-	// 		const absents_response = await api.post('/api/date-absent-filter', { date: e.detail.value })
-	// 		setPresents(presents_response.data.attendances)
-	// 		setAbsents(absents_response.data.attendances)
-	// 		console.log('absent', absents_response)
-	// 		console.log(presents_response)
-	// 	} catch (err) {
-	// 		alert(err)
-	// 		console.log(err)
-	// 	} finally {
-	// 		setLoading(false);
-	// 	}
-	// }
+	const handleDateChange = async(e) => {
+		try {
+			setLoading(true);
+			const date = formatDate(e.detail.value)
+			const filter_presents = await filterPresentAttendances(date);
+			const filter_absents = await filterAbsentAttendances(date);
+			setPresents(filter_presents.values)
+			setAbsents(filter_absents.values)
+		} catch (err) {
+			alert(err)
+			console.log(err)
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	const formatDate = (date) => {
+	  const d = new Date(date);
+	  const year = d.getFullYear();
+	  const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+	  const day = String(d.getDate()).padStart(2, '0');
+
+	  return `${year}-${month}-${day}`;
+	};
 
   return (<>
     <IonPage>
@@ -84,12 +96,12 @@ export default function Attendances() {
 	        <IonDatetime 
 	        	id="datetime" 
 	        	presentation='date'
-	        	// onIonChange={handleDateChange}
+	        	onIonChange={handleDateChange}
 	        ></IonDatetime>
 	    </IonModal>
 		<Scanner />
 		{ presents?.length > 0 && (presents.map((present) => 
-			<StudentLists key={present.id} student={present.student.name} time={present.time_in}/>)) 
+			<StudentLists key={present.id} student={present.student_name} time={present.time_in}/>)) 
 		}
 		{ absents?.length > 0 && (absents.map((absent) => 
 			<StudentLists key={absent.id} student={absent.name} />)) 

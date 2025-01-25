@@ -31,7 +31,7 @@ export const initdb = async () => {
     // Define and create the table
     await database.execute(`
       CREATE TABLE IF NOT EXISTS students (
-        id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+        id INTEGER PRIMARY KEY NOT NULL,
         name TEXT NOT NULL,
         strand TEXT NOT NULL,
         id_number TEXT NOT NULL UNIQUE
@@ -39,7 +39,7 @@ export const initdb = async () => {
     `);
 
     await database.execute(`
-      CREATE TABLE attendances (
+      CREATE TABLE IF NOT EXISTS attendances (
         id INTEGER PRIMARY KEY NOT NULL,
         student_id INTEGER NOT NULL,
         day DATE NOT NULL,
@@ -127,36 +127,42 @@ export const createStudent = async (studentData: any) => {
   }
 };
 
-export const queryAllAttendances = async () => {
+export const queryAllPresents = async () => {
   // open database
   await database.open();
 
   // query to get all of the contacts from database
-  return database.query('SELECT *  FROM attendances');
 
-  // return database.query( `
-  //   SELECT 
-  //     attendances.id AS attendance_id,
-  //     attendances.student_id,
-  //     attendances.day,
-  //     attendances.time_in,
-  //     attendances.remarks,
-  //     students.id AS student_id,
-  //     students.name AS student_name,
-  //     students.strand AS student_strand,
-  //     students.id_number AS student_id_number
-  //   FROM 
-  //     attendances
-  //   JOIN 
-  //     students 
-  //   ON 
-  //     attendances.student_id = students.id;` 
-  //   );
+  return database.query( `
+    SELECT 
+    attendances.id AS attendance_id,
+    attendances.student_id,
+    attendances.day,
+    attendances.time_in,
+    attendances.remarks,
+    students.id AS student_id,
+    students.name AS student_name,
+    students.strand AS student_strand,
+    students.id_number AS student_id_number
+    FROM 
+        attendances
+    JOIN 
+        students 
+    ON 
+        attendances.student_id = students.id
+    WHERE 
+        attendances.day = DATE('now');  -- This gets the current date
+    ` 
+    );
 };
-
 
 export const createAttendance = async(studentId: any) => {
   try {
+    const result = await database.query('SELECT id from students WHERE id_number=?', [studentId])
+    // return alert(JSON.stringify(result));
+    if (!result.values.length) {
+      throw new Error('Student not found')
+    }
     const currentDate = new Date();
     const day = currentDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
     const timeIn = currentDate.toTimeString().split(" ")[0]; // Format: HH:MM:SS
@@ -164,10 +170,60 @@ export const createAttendance = async(studentId: any) => {
     return await database.run(
       `INSERT INTO attendances (student_id, day, time_in, remarks) 
        VALUES (?, ?, ?, ?)`,
-      [studentId, day, timeIn, "ontime"] // Default remarks as 'ontime'
+      [result.values[0].id , day, timeIn, "ontime"] // Default remarks as 'ontime'
     );
   } catch (error) {
     console.error("Failed to create attendance record:", error);
     throw error;
   }
 };
+
+export const queryAllAbsents = async () => {
+  // open database
+  await database.open();
+
+  // query to get all of the contacts from database
+
+  return database.query( `
+    SELECT students.id, students.name, students.strand, students.id_number
+    FROM students
+    LEFT JOIN attendances ON students.id = attendances.student_id AND attendances.day = DATE('now')
+    WHERE attendances.id IS NULL;
+    ` 
+    );
+};
+
+
+export const filterPresentAttendances = async(date: any) => {
+  return await database.query(`
+    SELECT 
+    attendances.id AS attendance_id,
+    attendances.student_id,
+    attendances.day,
+    attendances.time_in,
+    attendances.remarks,
+    students.id AS student_id,
+    students.name AS student_name,
+    students.strand AS student_strand,
+    students.id_number AS student_id_number
+    FROM 
+        attendances
+    JOIN 
+        students 
+    ON 
+        attendances.student_id = students.id
+    WHERE 
+        attendances.day = ?;
+  `, [date])
+}
+
+export const filterAbsentAttendances = async(date: any) => {
+  return await database.query(`
+    SELECT students.id, students.name, students.strand, students.id_number
+    FROM students
+    LEFT JOIN attendances 
+    ON students.id = attendances.student_id 
+    AND attendances.day = ?
+    WHERE attendances.id IS NULL;
+  `, [date])
+}

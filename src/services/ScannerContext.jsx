@@ -45,14 +45,12 @@ export default function ScannerProvider({ children }) {
 
 
 			const response = await createAttendance(barcodes[0].rawValue);
-			if (response.status == 200) {
-				setToastOpen(true)
-				setScanned(!scanned)
-				setIsOpen(true)
-			}
+			setToastOpen(true)
+			setScanned(!scanned)
+			setIsOpen(true)
 
 		} catch(err) {
-			alert("error here" + err)
+			alert(err)
 		}
 	};
 
