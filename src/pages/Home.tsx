@@ -18,12 +18,13 @@ import {
   IonRouterLink,
   IonCardHeader,
   IonCardTitle,
-  IonButton
+  IonButton,
+  useIonViewWillEnter
 } from '@ionic/react';
 import { useState, useEffect, useContext } from 'react';
 import StudentLists from "../components/StudentLists.jsx";
 import api from '../services/api.js';
-import { allStudents } from '../services/db.js';
+// import { allStudents, initdb  } from '../services/db.js';
 import { ScannerContext } from '../services/ScannerContext.jsx';
 import { 
   add, 
@@ -33,25 +34,36 @@ import {
   trashOutline
 } from 'ionicons/icons';
 import './Home.css'
+
+import {
+  queryAllStudents,
+  initdb
+} from "../dataservice.tsx";
+
+
 export default function Home() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const { recorded } = useContext(ScannerContext)
 
+
   useEffect(() => {
-    const fetchAttendances = async() => {
-      try {
-        setLoading(true);
-        const query = await allStudents(); 
-        alert('query: ', JSON.stringify(query))
-      } catch (err) {
-        alert(JSON.stringify(err))
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchAttendances()
-  }, [])
+    initdb()
+      .then((db) => {
+        return queryAllStudents();
+      })
+      .then((results) => {
+        setStudents(results.values)
+      })
+      .catch((err) => alert(err))
+      // queryAllStudents()
+      //   .then((result) => {
+      //     return setStudents(result.value)
+      //   })
+      //   .catch((err) => alert(err))
+  }, [recorded])
+
+
 
   // const closeModal = () => {
   //   console.log('close')
@@ -104,9 +116,8 @@ export default function Home() {
               </IonCard>
             ))
           ) : (
-            <p> students </p> 
+            <p></p> 
           )}
-
           <IonLoading isOpen={loading} message="" />
 
       </IonContent>

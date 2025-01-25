@@ -81,7 +81,7 @@ export default function Attendances() {
 	        <IonDatetime 
 	        	id="datetime" 
 	        	presentation='date'
-	        	onIonChange={handleDateChange}
+	        	// onIonChange={handleDateChange}
 	        ></IonDatetime>
 	    </IonModal>
 		<Scanner />

@@ -3,11 +3,9 @@ import { useEffect } from 'react'
 // import { IonApp, IonRouterOutlet, setupIonicReact, IonTabBar } from '@ionic/react';
 import { IonApp, IonFooter, setupIonicReact, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/react';
 
-import {
-  initdb,
-} from './services/db.js'
+import { initdb } from "./dataservice.tsx";
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home.jsx';
+import Home from './pages/Home.tsx';
 import Attendances from './pages/Attendances.jsx';
 import AddStudent from './pages/AddStudent.tsx';
 import EditStudent from './pages/EditStudent.tsx';
@@ -46,18 +44,9 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App = () => {
-
   useEffect(() => {
-    const initializeDB = async() => {
-      await initdb();
-      console.log('db init')
-    }  
-
-    initializeDB()
-
-  }, []);
-
-
+    initdb().catch(() => window.alert("ERROR INITIALIZING"));
+  }, [])
   return (
     // <IonApp>
       <IonReactRouter>

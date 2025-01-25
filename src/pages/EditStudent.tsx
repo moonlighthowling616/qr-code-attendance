@@ -11,7 +11,7 @@ import {
   IonText,
   IonLoading
 } from '@ionic/react'
-import api from '../services/api.js'
+import { getStudentById } from '../dataservice.tsx'
 import { useParams, useHistory } from 'react-router-dom'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 
@@ -30,10 +30,10 @@ export default function AddStudent() {
     const fetchStudent = async() => {
       try {
         setLoading(true)
-        const { data } = await api.get(`/api/student/edit/${id}`)
-        setName(data.data.name)
-        setIdNumber(data.data.id_number)
-        setStrand(data.data.strand)
+        const { values } = await getStudentById(id)
+        setName(values[0].name)
+        setIdNumber(values[0].id_number)
+        setStrand(values[0].strand)
       } catch(err) {
         alert(err)
       } finally {

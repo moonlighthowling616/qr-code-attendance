@@ -11,10 +11,10 @@ import {
   IonText,
   IonLoading
 } from '@ionic/react'
-import api from '../services/api.js'
 import { useHistory } from 'react-router-dom'
 import { ScannerContext } from '../services/ScannerContext.jsx'
-import { createStudent, testDatabaseConnection } from '../services/db.js'
+import { createStudent, initdb } from "../dataservice.tsx";
+
 
 export default function AddStudent() {
   const history = useHistory(); 
@@ -24,25 +24,26 @@ export default function AddStudent() {
   const [loading, setLoading] = useState(false);
   const { recorded, setRecorded } = useContext(ScannerContext)
 
-  useEffect(() => {
-    testDatabaseConnection()
-  }, [])
-
   const handleSubmit = async() => {
+    // initdb()
+    //   .then((db) => {
+    //     const studentData = {name, strand, id_number: idNumber}
+    //     return createStudent(studentData);
+    //   })
+    //   .then(() => {
+    //     history.push('/home');
+    //   })
+    //   .catch((err) => alert('error ' + err))
+
     try {
       setLoading(true)
-      await createStudent(name, strand, idNumber)
-      // const response = await api.post('/api/student', {
-      //   name: name,
-      //   id_number: idNumber,
-      //   strand: strand
-      // });
 
 
 
+      const studentData = {name, strand, id_number: idNumber}
+      await createStudent(studentData)
     } catch(err) {
-      console.log(err)
-      alert("Something went wrong, please check if all fields are filled.")
+      alert(err)
     } finally {
       setRecorded(!recorded)
       history.push('/home');
