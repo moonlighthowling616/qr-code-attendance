@@ -37,14 +37,15 @@ import './Home.css'
 
 import {
   queryAllStudents,
-  initdb
+  initdb,
+  deleteStudentById
 } from "../dataservice.tsx";
 
 
 export default function Home() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { recorded } = useContext(ScannerContext)
+  const { recorded, setRecorded } = useContext(ScannerContext)
 
 
   useEffect(() => {
@@ -63,7 +64,14 @@ export default function Home() {
       //   .catch((err) => alert(err))
   }, [recorded])
 
-
+  const deleteStudent = async(id) => {
+    try {
+      await deleteStudentById(id)
+      setRecorded(!recorded)
+    } catch(err) {
+      alert('Error deleting: ' + err)
+    }
+  }
 
   // const closeModal = () => {
   //   console.log('close')
@@ -111,7 +119,7 @@ export default function Home() {
                   <IonButton routerLink={`edit/${student.id}`} color='secondary'>
                     <IonIcon icon={createOutline}/>
                   </IonButton>
-                  <IonButton color='danger'><IonIcon icon={trashOutline}/></IonButton>
+                  <IonButton color='danger' onClick={() => deleteStudent(student.id)}><IonIcon icon={trashOutline}/></IonButton>
                 </IonCardContent>
               </IonCard>
             ))

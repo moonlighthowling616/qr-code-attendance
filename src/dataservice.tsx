@@ -13,9 +13,6 @@ let database: any;
 /**
  * load from json file initial content
  */
-const loadJSON = async () => {
-  return await mSQLite.importFromJson(JSON.stringify(jsonData));
-};
 
 /**
  * initialize database..
@@ -35,11 +32,22 @@ export const initdb = async () => {
     // Define and create the table
     await database.execute(`
       CREATE TABLE IF NOT EXISTS students (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
         name TEXT NOT NULL,
         strand TEXT NOT NULL,
         id_number TEXT NOT NULL UNIQUE
       );
+    `);
+
+    await database.execute(`
+      CREATE TABLE IF NOT EXISTS attendances (
+        id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+        student_id INTEGER NOT NULL,
+        day DATE NOT NULL,
+        time_in TIME NOT NULL,
+        remarks TEXT CHECK(remarks IN ('ontime', 'late', 'halfday')) DEFAULT 'ontime',
+        FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+    );
     `);
 
     // Insert initial data
@@ -83,23 +91,23 @@ export const getStudentById = async (studentId: any) => {
 
 /**
  *
- * @param contactId
+ * @param studentId
  */
-export const deleteContactById = async (contactId: any) => {
-  return await database.query("DELETE FROM contacts WHERE id = ?;", [
-    contactId + "",
+export const deleteStudentById = async (studentId: any) => {
+  return await database.query("DELETE FROM students WHERE id = ?;", [
+    studentId + "",
   ]);
 };
 
 /**
  *
- * @param   
+ * @param studentId, studentData
  */
-export const updateContactById = async (contactId: any, contactData: any) => {
-  const { first_name, last_name, email } = contactData;
+export const updateStudentData = async (studentId: any, studentData: any) => {
+  const { name, strand, id_number } = studentData;
   return await database.query(
-    "UPDATE contacts SET first_name=?, last_name=?, email=? WHERE id = ?;",
-    [first_name, last_name, email, contactId + ""]
+    "UPDATE students SET name=?, strand=?, id_number=? WHERE id = ?;",
+    [name, strand, id_number, studentId + ""]
   );
 };
 
@@ -116,5 +124,50 @@ export const createStudent = async (studentData: any) => {
     );
   } catch(err) {
     throw err;
+  }
+};
+
+export const queryAllAttendances = async () => {
+  // open database
+  await database.open();
+
+  // query to get all of the contacts from database
+
+
+  return database.query( `
+    SELECT 
+      attendances.id AS attendance_id,
+      attendances.student_id,
+      attendances.day,
+      attendances.time_in,
+      attendances.remarks,
+      students.id AS student_id,
+      students.name AS student_name,
+      students.strand AS student_strand,
+      students.id_number AS student_id_number
+    FROM 
+      attendances
+    JOIN 
+      students 
+    ON 
+      attendances.student_id = students.id;` 
+    );
+};
+
+
+export const createAttendance = async(studentId: any) => {
+  try {
+    const currentDate = new Date();
+    const day = currentDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+    const timeIn = currentDate.toTimeString().split(" ")[0]; // Format: HH:MM:SS
+
+    return await database.run(
+      `INSERT INTO attendances (student_id, day, time_in, remarks) 
+       VALUES (?, ?, ?, ?)`,
+      [studentId, day, timeIn, "ontime"] // Default remarks as 'ontime'
+    );
+  } catch (error) {
+    console.error("Failed to create attendance record:", error);
+    throw error;
   }
 };

@@ -19,6 +19,7 @@ import StudentLists from "../components/StudentLists.jsx"
 import Scanner from '../components/Scanner.jsx'
 import { useEffect, useState, useContext } from 'react'
 import api from '../services/api.js'
+import { queryAllAttendances } from '../dataservice.tsx'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 
 export default function Attendances() {
@@ -27,25 +28,27 @@ export default function Attendances() {
 	const [loading, setLoading] = useState(false);
 	const { scanned, toastOpen, setToastOpen } = useContext(ScannerContext)
 	
-	// useEffect(() => {
-	// 	const fetchAttendances = async() => {
-	// 		try {
-	// 			setLoading(true);
-	// 			const presents_response = await api.get('/api/presents-today')
-	// 			const absents_response  = await api.get('/api/absents-today')
-	// 			setPresents(presents_response.data.attendances)
-	// 			setAbsents(absents_response.data.absentees)
-	// 			console.log(presents_response.data.attendances)
-	// 			console.log(absents_response.data.absentees)
+	useEffect(() => {
+		const fetchAttendances = async() => {
+			try {
+				setLoading(true);
+				const attendances = await queryAllAttendances();
+					alert(JSON.stringify(attendances))
+				// const presents_response = await api.get('/api/presents-today')
+				// const absents_response  = await api.get('/api/absents-today')
+				// setPresents(presents_response.data.attendances)
+				// setAbsents(absents_response.data.absentees)
+				// console.log(presents_response.data.attendances)
+				// console.log(absents_response.data.absentees)
 
-	// 		} catch (err) {
-	// 			alert(err)
-	// 		} finally {
-	// 			setLoading(false);
-	// 		}
-	// 	}
-	// 	fetchAttendances()
-	// }, [scanned])
+			} catch (err) {
+				alert(err)
+			} finally {
+				setLoading(false);
+			}
+		}
+		fetchAttendances()
+	}, [scanned])
 
 	// const handleDateChange = async(e) => {
 	// 	try {

@@ -11,7 +11,10 @@ import {
   IonText,
   IonLoading
 } from '@ionic/react'
-import { getStudentById } from '../dataservice.tsx'
+import { 
+  getStudentById,
+  updateStudentData
+} from '../dataservice.tsx'
 import { useParams, useHistory } from 'react-router-dom'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 
@@ -50,7 +53,7 @@ export default function AddStudent() {
   const handleSubmit = async() => {
     try {
       setLoading(true)
-      const response = await api.put(`/api/student/update/${id}`, {
+      const response = await updateStudentData(id,{
         name: name,
         id_number: idNumber,
         strand: strand
@@ -60,7 +63,7 @@ export default function AddStudent() {
 
     } catch(err) {
       console.log(err)
-      alert("Something went wrong, please check if all fields are filled.")
+      alert('error: ' + err)
     } finally {
       // redirect here
       setLoading(false)

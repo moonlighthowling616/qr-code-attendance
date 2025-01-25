@@ -4,8 +4,7 @@ import {
   BarcodeFormat,
   LensFacing,
 } from '@capacitor-mlkit/barcode-scanning';
-import api from './api.js'
-
+import { createAttendance } from '../dataservice.tsx'
 
 export const ScannerContext = createContext();
 export default function ScannerProvider({ children }) {
@@ -45,9 +44,7 @@ export default function ScannerProvider({ children }) {
 			});
 
 
-			const response = await api.post('/api/attendance', {
-				id_number: barcodes[0].rawValue
-			});
+			const response = await createAttendance(barcodes[0].rawValue);
 			if (response.status == 200) {
 				setToastOpen(true)
 				setScanned(!scanned)
@@ -55,7 +52,7 @@ export default function ScannerProvider({ children }) {
 			}
 
 		} catch(err) {
-			alert(err.response?.data.error)
+			alert("error here" + err)
 		}
 	};
 
