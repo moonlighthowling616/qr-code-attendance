@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { 
   IonPage,
   IonHeader,
@@ -14,6 +14,7 @@ import {
 import api from '../services/api.js'
 import { useHistory } from 'react-router-dom'
 import { ScannerContext } from '../services/ScannerContext.jsx'
+import { createStudent, testDatabaseConnection } from '../services/db.js'
 
 export default function AddStudent() {
   const history = useHistory(); 
@@ -23,14 +24,19 @@ export default function AddStudent() {
   const [loading, setLoading] = useState(false);
   const { recorded, setRecorded } = useContext(ScannerContext)
 
+  useEffect(() => {
+    testDatabaseConnection()
+  }, [])
+
   const handleSubmit = async() => {
     try {
       setLoading(true)
-      const response = await api.post('/api/student', {
-        name: name,
-        id_number: idNumber,
-        strand: strand
-      });
+      await createStudent(name, strand, idNumber)
+      // const response = await api.post('/api/student', {
+      //   name: name,
+      //   id_number: idNumber,
+      //   strand: strand
+      // });
 
 
 
@@ -42,8 +48,6 @@ export default function AddStudent() {
       history.push('/home');
       setLoading(false)
     }
-
-
   }
 
   return (

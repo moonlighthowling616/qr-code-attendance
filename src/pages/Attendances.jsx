@@ -26,42 +26,43 @@ export default function Attendances() {
 	const [absents, setAbsents] = useState();
 	const [loading, setLoading] = useState(false);
 	const { scanned, toastOpen, setToastOpen } = useContext(ScannerContext)
-	useEffect(() => {
-		const fetchAttendances = async() => {
-			try {
-				setLoading(true);
-				const presents_response = await api.get('/api/presents-today')
-				const absents_response  = await api.get('/api/absents-today')
-				setPresents(presents_response.data.attendances)
-				setAbsents(absents_response.data.absentees)
-				console.log(presents_response.data.attendances)
-				console.log(absents_response.data.absentees)
+	
+	// useEffect(() => {
+	// 	const fetchAttendances = async() => {
+	// 		try {
+	// 			setLoading(true);
+	// 			const presents_response = await api.get('/api/presents-today')
+	// 			const absents_response  = await api.get('/api/absents-today')
+	// 			setPresents(presents_response.data.attendances)
+	// 			setAbsents(absents_response.data.absentees)
+	// 			console.log(presents_response.data.attendances)
+	// 			console.log(absents_response.data.absentees)
 
-			} catch (err) {
-				alert(err)
-			} finally {
-				setLoading(false);
-			}
-		}
-		fetchAttendances()
-	}, [scanned])
+	// 		} catch (err) {
+	// 			alert(err)
+	// 		} finally {
+	// 			setLoading(false);
+	// 		}
+	// 	}
+	// 	fetchAttendances()
+	// }, [scanned])
 
-	const handleDateChange = async(e) => {
-		try {
-			setLoading(true);
-			const presents_response = await api.post('/api/date-present-filter', { date: e.detail.value })
-			const absents_response = await api.post('/api/date-absent-filter', { date: e.detail.value })
-			setPresents(presents_response.data.attendances)
-			setAbsents(absents_response.data.attendances)
-			console.log('absent', absents_response)
-			console.log(presents_response)
-		} catch (err) {
-			alert(err)
-			console.log(err)
-		} finally {
-			setLoading(false);
-		}
-	}
+	// const handleDateChange = async(e) => {
+	// 	try {
+	// 		setLoading(true);
+	// 		const presents_response = await api.post('/api/date-present-filter', { date: e.detail.value })
+	// 		const absents_response = await api.post('/api/date-absent-filter', { date: e.detail.value })
+	// 		setPresents(presents_response.data.attendances)
+	// 		setAbsents(absents_response.data.attendances)
+	// 		console.log('absent', absents_response)
+	// 		console.log(presents_response)
+	// 	} catch (err) {
+	// 		alert(err)
+	// 		console.log(err)
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// }
 
   return (<>
     <IonPage>

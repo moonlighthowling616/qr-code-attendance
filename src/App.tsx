@@ -1,7 +1,11 @@
 import { Redirect, Route } from 'react-router-dom';
+import { useEffect } from 'react'
 // import { IonApp, IonRouterOutlet, setupIonicReact, IonTabBar } from '@ionic/react';
 import { IonApp, IonFooter, setupIonicReact, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/react';
 
+import {
+  initdb,
+} from './services/db.js'
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home.jsx';
 import Attendances from './pages/Attendances.jsx';
@@ -42,6 +46,18 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App = () => {
+
+  useEffect(() => {
+    const initializeDB = async() => {
+      await initdb();
+      console.log('db init')
+    }  
+
+    initializeDB()
+
+  }, []);
+
+
   return (
     // <IonApp>
       <IonReactRouter>

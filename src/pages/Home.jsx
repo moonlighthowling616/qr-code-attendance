@@ -23,6 +23,7 @@ import {
 import { useState, useEffect, useContext } from 'react';
 import StudentLists from "../components/StudentLists.jsx";
 import api from '../services/api.js';
+import { allStudents } from '../services/db.js';
 import { ScannerContext } from '../services/ScannerContext.jsx';
 import { 
   add, 
@@ -41,20 +42,20 @@ export default function Home() {
     const fetchAttendances = async() => {
       try {
         setLoading(true);
-        const { data } = await api.get('/api/student')
-        setStudents(data.students)
+        const query = await allStudents(); 
+        alert('query: ', JSON.stringify(query))
       } catch (err) {
-        alert(err)
+        alert(JSON.stringify(err))
       } finally {
         setLoading(false);
       }
     }
     fetchAttendances()
-  }, [recorded])
+  }, [])
 
-  const closeModal = () => {
-    console.log('close')
-  }
+  // const closeModal = () => {
+  //   console.log('close')
+  // }
 
   return (<>
     <IonPage>
@@ -69,7 +70,6 @@ export default function Home() {
             <div>
               <IonText color='dark' style={{ display: 'flex', alignItems: 'center', gap: '1.5em'}}>
                 <IonIcon size='large' icon={people}></IonIcon>
-                <h2 className='hello-text'>Classmates</h2>
               </IonText>
             <IonCardSubtitle style={{ marginTop: '5px' }}>Total: {students?.length > 0 ? students.length : 'No student available.'}</IonCardSubtitle>
             </div>
@@ -90,7 +90,7 @@ export default function Home() {
           </IonFab>
           {students?.length > 0 ? (
             students.map((student) => (
-              <IonCard key={student.id}> {/* Use a unique key for each student */}
+              <IonCard key={student.id}> 
                 <IonCardHeader>
                   <IonCardTitle>{student.name}</IonCardTitle>
                   <IonCardSubtitle>{student.id_number}</IonCardSubtitle>
@@ -104,7 +104,7 @@ export default function Home() {
               </IonCard>
             ))
           ) : (
-            <p>No students available</p> // Optional message when there are no students
+            <p> students </p> 
           )}
 
           <IonLoading isOpen={loading} message="" />
