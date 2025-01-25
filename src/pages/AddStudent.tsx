@@ -15,7 +15,6 @@ import { useHistory } from 'react-router-dom'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 import { createStudent, initdb } from "../dataservice.tsx";
 
-
 export default function AddStudent() {
   const history = useHistory(); 
   const [name, setName] = useState('');
@@ -25,21 +24,8 @@ export default function AddStudent() {
   const { recorded, setRecorded } = useContext(ScannerContext)
 
   const handleSubmit = async() => {
-    // initdb()
-    //   .then((db) => {
-    //     const studentData = {name, strand, id_number: idNumber}
-    //     return createStudent(studentData);
-    //   })
-    //   .then(() => {
-    //     history.push('/home');
-    //   })
-    //   .catch((err) => alert('error ' + err))
-
     try {
       setLoading(true)
-
-
-
       const studentData = {name, strand, id_number: idNumber}
       await createStudent(studentData)
     } catch(err) {
