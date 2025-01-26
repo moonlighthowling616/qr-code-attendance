@@ -63,7 +63,6 @@ export const initdb = async () => {
 
     return database;
   } catch (e) {
-    window.alert(JSON.stringify(e, null, 2));
     return null;
   }
 };

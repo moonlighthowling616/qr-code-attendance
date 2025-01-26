@@ -91,15 +91,19 @@ export default function Attendances() {
         </IonHeader>
       <IonContent class='home-content ion-padding'>
 	    
-	    <IonDatetimeButton style={{ marginTop: '.5em'}}datetime="datetime" mode='ios'></IonDatetimeButton>
+	    <IonDatetimeButton  
+	    	datetime="datetime"
+	    />
+
 	    <IonModal keepContentsMounted={true}>
 	        <IonDatetime 
 	        	id="datetime" 
 	        	presentation='date'
+	        	color='primary'
 	        	onIonChange={handleDateChange}
-	        ></IonDatetime>
+	        />
 	    </IonModal>
-		<Scanner />
+
 		{ presents?.length > 0 && (presents.map((present) => 
 			<StudentLists key={present.id} student={present.student_name} time={present.time_in}/>)) 
 		}

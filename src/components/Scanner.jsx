@@ -11,7 +11,6 @@ import {
   LensFacing,
 } from '@capacitor-mlkit/barcode-scanning';
 import { scan } from 'ionicons/icons';
-import api from '../services/api.js'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 
 export default function Scanner() {

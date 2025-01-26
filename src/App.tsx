@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 // import { IonApp, IonRouterOutlet, setupIonicReact, IonTabBar } from '@ionic/react';
 import { IonApp, IonFooter, setupIonicReact, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/react';
 
@@ -26,7 +26,7 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
 /* Ionic icons */
-import { home, checkbox } from 'ionicons/icons';
+import { home, homeOutline, calendarOutline, calendar } from 'ionicons/icons';
 /** 
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -41,16 +41,42 @@ import '@ionic/react/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 
+/* Custom styles*/
+import './css/styles.css'
+
+import { useLocation } from 'react-router-dom';
 setupIonicReact();
+
 
 const App = () => {
   useEffect(() => {
     initdb().catch(() => window.alert("ERROR INITIALIZING"));
   }, [])
+  const tabs = [
+    {
+      name: 'home',
+      url: '/home',
+      icon: homeOutline,
+      activeIcon: home,
+    },
+
+    {
+      name: 'attendances',
+      url: '/attendances',
+      icon: calendarOutline,
+      activeIcon: calendar,
+    },
+
+  ]
+
+  const [ activeTab, setActiveTab ] = useState(tabs[0].name);
+
+
+
   return (
-    // <IonApp>
+    <IonApp>
       <IonReactRouter>
-        <IonTabs id='footer'>
+        <IonTabs >
           <IonRouterOutlet>
             <Redirect exact path="/" to="/home" />
             
@@ -61,20 +87,22 @@ const App = () => {
             <Route path="/edit/:id" render={() => <EditStudent />} exact={true}/>
           </IonRouterOutlet>
 
-          <IonTabBar slot="bottom" id='footer'>
-            <IonTabButton tab="home" href="/home">
-              <IonIcon icon={home} size="" />
-              <IonLabel>Home</IonLabel>
-            </IonTabButton>
+          <IonTabBar slot="bottom" id="footer" onIonTabsDidChange={ e => setActiveTab(e.detail.tab) }>
+             { tabs.map((tab, barIndex) => {
 
-            <IonTabButton tab="attendances" href="/attendances">
-              <IonIcon icon={checkbox} size="" />
-              <IonLabel>Attendance</IonLabel>
-            </IonTabButton>
+              const active = tab.name === activeTab;
+
+              return (
+
+                <IonTabButton key={ `tab_${ barIndex }` } tab={ tab.name } href={ tab.url }>
+                  <IonIcon icon={ active ? tab.activeIcon : tab.icon } />
+                </IonTabButton>
+              );
+            })}
           </IonTabBar>
         </IonTabs>
       </IonReactRouter>
-    // </IonApp>
+    </IonApp>
   );
 };
 

@@ -27,3 +27,7 @@
 	font-weight: bold !important;
 	font-size: 1.4em !important;
 }
+
+ion-fab-button {
+	--ion-background-color: white !important;
+}
