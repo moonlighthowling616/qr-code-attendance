@@ -83,10 +83,25 @@ http://ionicframework.com/docs/theming/ */
 	--ion-color-rose-tint: #8f2f56;
 
 }
-* {
-	font-family: 'Open Sans', sans-serif;
-	
+@font-face {
+	font-family: 'Open Sans';
+	src: url('/assets/fonts/Open_Sans/static/OpenSans-Regular.ttf') format('truetype');
 }
+
+@font-face {
+	font-family: 'Raleway';
+	src: url('/assets/fonts/Raleway/static/Raleway-Regular.ttf') format('truetype');
+}
+
+* {
+	font-family: Open Sans;
+}
+
+.brand-text {
+	font-family: Raleway !important;
+	font-weight: 800;
+}
+
 ion-app {
 	--ion-background-color: white;
 	--ion-text-color: black;
