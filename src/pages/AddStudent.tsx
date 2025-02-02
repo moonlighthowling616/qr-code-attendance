@@ -14,6 +14,7 @@ import {
 import { useHistory } from 'react-router-dom'
 import { ScannerContext } from '../services/ScannerContext.jsx'
 import { createStudent, initdb } from "../dataservice.tsx";
+import './AddStudent.css'
 
 export default function AddStudent() {
   const history = useHistory(); 
@@ -66,7 +67,7 @@ export default function AddStudent() {
                 placeholder="STRAND-LEVEL-SECTION"
                 onIonInput={(e) => setStrand(e.detail.value!) } 
                 />
-              <IonButton onClick={handleSubmit} expand='block' color='dark'>Submit</IonButton>
+              <IonButton onClick={handleSubmit} expand='block' color='primary'>add student</IonButton>
           </div>
           <IonLoading isOpen={loading} message="" />
         </IonContent>

@@ -15,7 +15,7 @@ import {
 	IonToast,
 } from '@ionic/react'
 import { scan } from 'ionicons/icons';
-import StudentLists from "../components/StudentLists.jsx"
+import StudentCard from "../components/StudentCard.jsx"
 import Scanner from '../components/Scanner.jsx'
 import { useEffect, useState, useContext } from 'react'
 import { 
@@ -103,9 +103,10 @@ export default function Attendances() {
 	        	onIonChange={handleDateChange}
 	        />
 	    </IonModal>
+			<StudentCard student='Benedetta Sen'/> 
 
 		{ presents?.length > 0 && (presents.map((present) => 
-			<StudentLists key={present.id} student={present.student_name} time={present.time_in}/>)) 
+			<StudentCard key={present.id} student={present.student_name} time={present.time_in}/>)) 
 		}
 		{ absents?.length > 0 && (absents.map((absent) => 
 			<StudentLists key={absent.id} student={absent.name} />)) 

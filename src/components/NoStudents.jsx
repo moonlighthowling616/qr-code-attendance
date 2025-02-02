@@ -4,10 +4,10 @@ const NoStudents = () => (
 
 	<IonRow className="ion-text-center ion-justify-content-center">
     <IonCol size="9">
-      <h3>Welcome to <IonText color='primary' style={{ fontSize: '1.2em'}}>Lourdes College</IonText> QR Code attendance system!</h3>
+      <IonText color='primary' style={{ fontSize: '2em'}}>Lourdes College</IonText>
       <img src="/assets/icon2.png" alt="icon" />
 
-      <p>Click the <IonText color="primary">button</IonText> in the bottom right to add a new student.</p>
+      {/*<p>Click the <IonText color="primary">button</IonText> in the bottom right to add a new student.</p>*/}
     </IonCol>
   </IonRow>
 );

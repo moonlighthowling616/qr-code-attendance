@@ -69,11 +69,11 @@ export default function Home() {
     <IonPage>
       <IonHeader>
           <IonToolbar>
-            {/* Menu Button */}
             {/*<IonTitle>Welcome</IonTitle>*/}
           </IonToolbar>
         </IonHeader>
       <IonContent class='ion-padding'>
+         
           <FabButton/>
           {students?.length > 0 ? (
             students.map((student, index) => (
