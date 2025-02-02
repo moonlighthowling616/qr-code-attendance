@@ -61,10 +61,10 @@ export default function AddStudent() {
                 onIonInput={(e) => setIdNumber(e.detail.value!) } 
                 />
               <IonInput 
-                label="Strand-Level-Section"
+                label="Additional Information"
                 labelPlacement="floating" 
                 fill='outline' 
-                placeholder="STRAND-LEVEL-SECTION"
+                placeholder="(Specialization/Section/Level)"
                 onIonInput={(e) => setStrand(e.detail.value!) } 
                 />
               <IonButton onClick={handleSubmit} expand='block' color='primary'>add student</IonButton>

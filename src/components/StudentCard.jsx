@@ -31,7 +31,7 @@ function StudentCard({ student, time }) {
             <span style={{ fontWeight: 'bold' }}>{ student }</span>
           </IonText>
           { time && 
-            <sm style={{ fontSize: '.9em'}}>At { time }</sm>
+            <sm style={{ fontSize: '.9em'}}>At { formatTimeTo12Hour(time) }</sm>
           }
         </div>
         {time ? (<IonIcon class='check-icon' size='lg' icon={checkmarkCircle} />)

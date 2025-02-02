@@ -27,9 +27,10 @@ http://ionicframework.com/docs/theming/ */
 	--ion-color-tertiary-tint: #6370ff;
 
 	/** success **/
-	--ion-color-success: #2dd36f;
+/*	--ion-color-success: #2dd36f;*/
+	--ion-color-success: lightgreen;
 	--ion-color-success-rgb: 45, 211, 111;
-	--ion-color-success-contrast: #ffffff;
+	--ion-color-success-contrast: #28a745;
 	--ion-color-success-contrast-rgb: 255, 255, 255;
 	--ion-color-success-shade: #28ba62;
 	--ion-color-success-tint: #42d77d;
@@ -43,9 +44,9 @@ http://ionicframework.com/docs/theming/ */
 	--ion-color-warning-tint: #ffca22;
 
 	/** danger **/
-	--ion-color-danger: #eb445a;
+	--ion-color-danger: #FEC5C5;
 	--ion-color-danger-rgb: 235, 68, 90;
-	--ion-color-danger-contrast: #ffffff;
+	--ion-color-danger-contrast: #D9534F;
 	--ion-color-danger-contrast-rgb: 255, 255, 255;
 	--ion-color-danger-shade: #cf3c4f;
 	--ion-color-danger-tint: #ed576b;
@@ -102,6 +103,12 @@ http://ionicframework.com/docs/theming/ */
 	font-weight: 800;
 }
 
+ion-title {
+	font-family: Raleway;
+	font-weight: 900;
+	text-align: center;
+}
+
 ion-app {
 	--ion-background-color: white;
 	--ion-text-color: black;
@@ -128,19 +135,19 @@ ion-list {
 ion-item {
 	--background: white;
 	--color: #fff;
-	--border-radius: 20px;
+/*	--border-radius: 20px;*/
 }
 ion-item-sliding {
-/*	padding: 12px;*/
+	margin-top: 5px;
 }
 ion-item-options {
-	height: 100%;
-	align-items: center;
+/*	height: 100%;*/
+/*	align-items: center;*/
 }
-/*ion-label {
+ion-label {
 	color: black !important;
-
-}*/
+	font-size: 1.2em !important;
+}
 
 ion-datetime {
 	--background: #fff1f2;
@@ -159,6 +166,7 @@ ion-datetime-button::part(native) {
 }
 
 ion-header {
-	box-shadow: none;
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px !important;
 }
+
 

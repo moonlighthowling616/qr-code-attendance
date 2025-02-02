@@ -13,6 +13,7 @@ import {
 	IonDatetimeButton,
 	IonModal,
 	IonToast,
+	IonTitle,
 } from '@ionic/react'
 import { scan } from 'ionicons/icons';
 import StudentCard from "../components/StudentCard.jsx"
@@ -83,10 +84,7 @@ export default function Attendances() {
     <IonPage>
       <IonHeader>
           <IonToolbar>
-            {/* Menu Button */}
-            <IonButtons slot="start">
-              <IonMenuButton></IonMenuButton>
-            </IonButtons>
+          	<IonTitle>Attendance</IonTitle>
           </IonToolbar>
         </IonHeader>
       <IonContent class='home-content ion-padding'>
@@ -103,12 +101,11 @@ export default function Attendances() {
 	        	onIonChange={handleDateChange}
 	        />
 	    </IonModal>
-			{/*<StudentCard student='Benedetta Sen'/> */}
 		{ presents?.length > 0 && (presents.map((present) => 
 			<StudentCard key={present.id} student={present.student_name} time={present.time_in}/>)) 
 		}
 		{ absents?.length > 0 && (absents.map((absent) => 
-			<StudentLists key={absent.id} student={absent.name} />)) 
+			<StudentCard key={absent.id} student={absent.name} />)) 
 		}
 		<IonLoading 
 		isOpen={loading}/>

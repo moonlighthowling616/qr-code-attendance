@@ -69,15 +69,14 @@ export default function Home() {
     <IonPage>
       <IonHeader>
           <IonToolbar>
-            {/*<IonTitle>Welcome</IonTitle>*/}
+            <IonTitle style={{ textAlign: 'center' }}>Home</IonTitle>
           </IonToolbar>
         </IonHeader>
       <IonContent class='ion-padding'>
-         
           <FabButton/>
           {students?.length > 0 ? (
             students.map((student, index) => (
-              <HomePageStudentList key={index} name={student.name} id={student.id}/>
+              <HomePageStudentList key={index} name={student.name} id_number={student.id_number} id={student.id}/>
             ))
           ) : (
             <NoStudents />
