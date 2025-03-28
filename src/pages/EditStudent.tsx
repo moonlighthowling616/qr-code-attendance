@@ -8,6 +8,7 @@ import {
   IonInput,
   IonItem,
   IonList,
+  IonTitle,
   IonText,
   IonLoading
 } from '@ionic/react'
@@ -75,8 +76,9 @@ export default function AddStudent() {
   	<>
   		<IonPage>
         <IonHeader>
-            <IonToolbar>
-            </IonToolbar>
+          <IonToolbar>
+            <IonTitle>Update Student</IonTitle>
+          </IonToolbar>
         </IonHeader>
         <IonContent class='ion-padding' >
         {/*<IonText color='dark'><h2>Add Classmate</h2></IonText>*/}

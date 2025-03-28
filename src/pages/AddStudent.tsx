@@ -9,7 +9,8 @@ import {
   IonItem,
   IonList,
   IonText,
-  IonLoading
+  IonLoading,
+  IonTitle
 } from '@ionic/react'
 import { useHistory } from 'react-router-dom'
 import { ScannerContext } from '../services/ScannerContext.jsx'
@@ -42,8 +43,9 @@ export default function AddStudent() {
   	<>
   		<IonPage>
         <IonHeader>
-            <IonToolbar>
-            </IonToolbar>
+           <IonToolbar>
+            <IonTitle>Create Student</IonTitle>
+          </IonToolbar>
         </IonHeader>
         <IonContent class='ion-padding' >
         {/*<IonText color='dark'><h2>Add Classmate</h2></IonText>*/}
