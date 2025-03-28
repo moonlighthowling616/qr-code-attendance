@@ -1,1 +1,1 @@
-# ionic-capstone
+# capstone-project
