@@ -84,8 +84,9 @@ export default function AddStudent() {
         {/*<IonText color='dark'><h2>Add Classmate</h2></IonText>*/}
          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px'}}>
               <IonInput 
-                label="Full name" 
-                labelPlacement="floating" 
+                label="Name" 
+                labelPlacement="floating"
+                placeholder="Last Name, First Name M.I (e.g. Ashvites, Reynard C.)"
                 fill='outline'
                 value={name}
                 onIonInput={(e) => setName(e.detail.value!) } 
