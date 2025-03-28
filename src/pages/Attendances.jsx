@@ -84,7 +84,7 @@ export default function Attendances() {
     <IonPage>
       <IonHeader>
           <IonToolbar>
-          	<IonTitle>Attendance</IonTitle>
+          	<IonTitle>eBeadle Sheet</IonTitle>
           </IonToolbar>
         </IonHeader>
       <IonContent class='home-content ion-padding'>
