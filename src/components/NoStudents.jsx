@@ -19,7 +19,7 @@ const NoStudents = () => (
   <IonRow className="ion-text-center ion-justify-content-center">
     <IonCol size="9">
       <IonText className="brand-text" color="primary" style={{ fontSize: '2em' }}>
-        Lourdes College QR Attendance Checker
+        eBeadle: QR Code-Based Attendance Checker
       </IonText>
       <img src="/assets/icon2.png" alt="icon" />
       <p>
