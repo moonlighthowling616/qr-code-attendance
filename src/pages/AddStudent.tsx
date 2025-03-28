@@ -68,7 +68,7 @@ export default function AddStudent() {
                 label="Additional Information"
                 labelPlacement="floating" 
                 fill='outline' 
-                placeholder="(Track Grade - Section (e.g. TVL 12 - IOS)"
+                placeholder="Track Grade - Section (e.g. TVL 12 - IOS)"
                 onIonInput={(e) => setStrand(e.detail.value!) } 
                 />
               <IonButton onClick={handleSubmit} expand='block' color='primary'>add student</IonButton>
