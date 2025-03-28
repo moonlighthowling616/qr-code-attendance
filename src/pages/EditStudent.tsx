@@ -86,7 +86,6 @@ export default function AddStudent() {
               <IonInput 
                 label="Name" 
                 labelPlacement="floating"
-                placeholder="Last Name, First Name M.I (e.g. Ashvites, Reynard C.)"
                 fill='outline'
                 value={name}
                 onIonInput={(e) => setName(e.detail.value!) } 
@@ -99,10 +98,9 @@ export default function AddStudent() {
                 onIonInput={(e) => setIdNumber(e.detail.value!) } 
                 />
               <IonInput 
-                label="Additional Information (Specialization/Section/Level)"
+                label="Track, Grade & Section"
                 labelPlacement="floating" 
                 fill='outline' 
-                placeholder="(Specialization/Section/Level)"
                 value={strand}
                 onIonInput={(e) => setStrand(e.detail.value!) } 
                 />
