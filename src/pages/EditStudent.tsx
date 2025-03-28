@@ -77,7 +77,7 @@ export default function AddStudent() {
   		<IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Update Student</IonTitle>
+            <IonTitle>Edit Details</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent class='ion-padding' >
