@@ -44,7 +44,7 @@ export default function AddStudent() {
   		<IonPage>
         <IonHeader>
            <IonToolbar>
-            <IonTitle>Create Student</IonTitle>
+            <IonTitle>Add Student</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent class='ion-padding' >
