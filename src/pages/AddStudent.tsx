@@ -51,14 +51,16 @@ export default function AddStudent() {
         {/*<IonText color='dark'><h2>Add Classmate</h2></IonText>*/}
          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px'}}>
               <IonInput 
-                label="Full name" 
+                label="Name" 
                 labelPlacement="floating" 
+                placeholder="Last Name, First Name M.I Ex. Ashvites, Reynard C."
                 fill='outline'
                 onIonInput={(e) => setName(e.detail.value!) } 
               />
               <IonInput 
                 label="ID Number" 
                 labelPlacement="floating" 
+                placeholder="SYY-1234 Ex. S23-0401"
                 fill='outline'
                 onIonInput={(e) => setIdNumber(e.detail.value!) } 
                 />
@@ -66,7 +68,7 @@ export default function AddStudent() {
                 label="Additional Information"
                 labelPlacement="floating" 
                 fill='outline' 
-                placeholder="(Specialization/Section/Level)"
+                placeholder="(Track Grade - Section Ex. TVL 12 - IOS"
                 onIonInput={(e) => setStrand(e.detail.value!) } 
                 />
               <IonButton onClick={handleSubmit} expand='block' color='primary'>add student</IonButton>
