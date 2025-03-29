@@ -44,7 +44,7 @@ export default function AddStudent() {
   return (
     <>
       <IonPage>
-        <IonHeader>
+        <IonHeader className="ion-header">
           <IonToolbar>
             <IonTitle>Add Student</IonTitle>
           </IonToolbar>
