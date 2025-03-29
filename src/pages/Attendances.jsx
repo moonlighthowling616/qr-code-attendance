@@ -101,9 +101,14 @@ export default function Attendances() {
 	        	onIonChange={handleDateChange}
 	        />
 	    </IonModal>
-		{ presents?.length > 0 && (presents.map((present) => 
-			<StudentCard key={present.id} status={present.remark} student={present.student_name} time={present.time_in}/>)) 
+		{ presents?.length > 0 && (presents.map((present) => {
+			return <>
+				<StudentCard key={present.id} status={present.remark} student={present.student_name} time={present.time_in}/>
+			</>
+		}))
 		}
+
+
 		{ absents?.length > 0 && (absents.map((absent) => 
 			<StudentCard key={absent.id} student={absent.name} />)) 
 		}

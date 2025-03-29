@@ -2,9 +2,6 @@
 import { Plugins } from "@capacitor/core";
 import { SQLiteConnection } from "@capacitor-community/sqlite";
 
-// JSON FILE WITH DATA
-import jsonData from "./import-json.js";
-
 const { CapacitorSQLite } = Plugins;
 
 const mSQLite = new SQLiteConnection(CapacitorSQLite);
@@ -163,6 +160,8 @@ export const createAttendance = async (studentId: any) => {
       throw new Error('Student not found');
     }
 
+    // return alert(JSON.stringify(result))
+
     const currentDate = new Date();
     const day = currentDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
     const timeIn = currentDate.toTimeString().split(" ")[0]; // Format: HH:MM:SS
@@ -228,7 +227,7 @@ export const filterPresentAttendances = async(date: any) => {
     attendances.student_id,
     attendances.day,
     attendances.time_in,
-    attendances.remarks,
+    attendances.remarks as remark,
     students.id AS student_id,
     students.name AS student_name,
     students.strand AS student_strand,

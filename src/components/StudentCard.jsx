@@ -6,7 +6,7 @@ import './StudentCard.css'
 function StudentCard({ student, time, status }) {
 
  const formatTimeTo12Hour = (time) => {
-  const [hours, minutes, seconds] = time.split(":").map((n) => Number(n));
+  const [hours, minutes, _] = time.split(":").map((n) => Number(n));
 
   let period = "AM";
   let formattedHours = hours;
@@ -16,14 +16,14 @@ function StudentCard({ student, time, status }) {
     if (formattedHours > 12) {
       formattedHours -= 12;
     }
-  } else if (formattedHours === 0) {
+  } else if (formattedHours == 0) {
     formattedHours = 12; 
   }
 
-  return `${formattedHours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} ${period}`;
+  return `${formattedHours}:${minutes.toString().padStart(2, "0")}:${period}`;
 };
 
-  function displayAttendance(status) {
+  function indicator(status) {
     if (status == 'late') {
       return <div>
       <IonIcon class='late-icon' size='lg' icon={alarmOutline}/>
@@ -39,10 +39,7 @@ function StudentCard({ student, time, status }) {
         <IonIcon class='check-icon' size='lg' icon={checkmarkCircle} />
         <p style={{fontSize: '.8em'}}>Ontime</p>
         </>
-    } else {
-        return <IonIcon class='ellipse-icon' size='lg' icon={ellipse} />
-    }
-
+    } 
   }
 
   return (
@@ -53,14 +50,13 @@ function StudentCard({ student, time, status }) {
             <span style={{ fontWeight: 'bold' }}>{ student }</span>
           </IonText>
           { time && <>
-            <sm style={{ fontSize: '.9em'}}>At { formatTimeTo12Hour(time) }</sm>
+            <sm style={{ fontSize: '.9em'}}>Entered at { formatTimeTo12Hour(time) }</sm>
             </>
           }
         </div>
         {/* {time ? (<IonIcon class='check-icon' size='lg' icon={checkmarkCircle} />)
         } */}
-      
-      { displayAttendance(status) }
+      { time ? indicator(status) : <IonIcon class='ellipse-icon' size='lg' icon={ellipse} /> }
 
       </IonCardContent>
     </IonCard>
