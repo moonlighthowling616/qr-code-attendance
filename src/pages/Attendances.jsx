@@ -87,7 +87,7 @@ export default function Attendances() {
           	<IonTitle>eBeadle Sheet</IonTitle>
           </IonToolbar>
         </IonHeader>
-      <IonContent class='home-content ion-padding'>
+      <IonContent className=' ion-padding'>
 	    
 	    <IonDatetimeButton  
 	    	datetime="datetime"
@@ -111,7 +111,7 @@ export default function Attendances() {
 		isOpen={loading}/>
 		<IonToast
           isOpen={toastOpen}
-          position="top"
+          position="bottom"
           // positionAnchor="footer"
           message="Attendance recorded."
           onDidDismiss={() => setToastOpen(false)}

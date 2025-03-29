@@ -58,26 +58,32 @@ export default function AddStudent() {
               label="Name"
               labelPlacement="floating"
               placeholder="Last Name, First Name M.I (e.g. Ashvites, Reynard C.)"
-              fill="outline"
+              // fill="solid"
+              color="primary"
               onIonInput={(e) => setName(e.detail.value!)}
             />
             <IonInput
               label="ID Number"
               labelPlacement="floating"
               placeholder="SYY-1234 (e.g. S23-0401)"
-              fill="outline"
+              // fill="outline"
               onIonInput={(e) => setIdNumber(e.detail.value!)}
             />
             <IonInput
               label="Additional Information"
               labelPlacement="floating"
-              fill="outline"
+              // fill="outline"
               placeholder="Track Grade - Section (e.g. TVL 12 - IOS)"
+              helperText="Please make sure the ID number is not taken."
               onIonInput={(e) => setStrand(e.detail.value!)}
             />
-            <IonButton onClick={handleSubmit} expand="block" color="dark">
-              Add Student
-            </IonButton>
+            <button
+              onClick={handleSubmit}
+              // color="primary"
+              className="submit-btn"
+            >
+              Save
+            </button>
           </div>
           <IonLoading isOpen={loading} message="" />
         </IonContent>
