@@ -33,7 +33,7 @@ export default function AddStudent() {
       const studentData = { name, strand, id_number: idNumber };
       await createStudent(studentData);
     } catch (err) {
-      alert(err);
+      alert("Something wen't terribly wrong, please check if the ID number is already taken.");
     } finally {
       setRecorded(!recorded);
       history.push("/home");

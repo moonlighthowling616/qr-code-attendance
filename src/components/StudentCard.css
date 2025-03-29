@@ -12,6 +12,17 @@ ion-card-content div {
 	color: #28a745;
 }
 
+.late-icon {
+	font-size: 2.3rem;
+	color: #FFEB3B;
+}
+
+.halfday-icon {
+	color: #2196F3;
+	font-size: 2.3rem;
+}
+
+
 .ellipse-icon {
 	font-size: 2.3rem;
 	color: lightgray;

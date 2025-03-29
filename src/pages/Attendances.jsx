@@ -102,7 +102,7 @@ export default function Attendances() {
 	        />
 	    </IonModal>
 		{ presents?.length > 0 && (presents.map((present) => 
-			<StudentCard key={present.id} student={present.student_name} time={present.time_in}/>)) 
+			<StudentCard key={present.id} status={present.remark} student={present.student_name} time={present.time_in}/>)) 
 		}
 		{ absents?.length > 0 && (absents.map((absent) => 
 			<StudentCard key={absent.id} student={absent.name} />)) 

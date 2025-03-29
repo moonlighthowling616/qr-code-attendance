@@ -1,9 +1,9 @@
 import React from 'react';
 import { IonText, IonCard, IonIcon, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
-import { checkmarkCircle, ellipse } from 'ionicons/icons'
+import { alarm, alarmOutline, batteryHalf, checkmarkCircle, ellipse, heartHalf, shieldHalf, starHalf } from 'ionicons/icons'
 import './StudentCard.css'
 
-function StudentCard({ student, time }) {
+function StudentCard({ student, time, status }) {
 
  const formatTimeTo12Hour = (time) => {
   const [hours, minutes, seconds] = time.split(":").map((n) => Number(n));
@@ -23,6 +23,28 @@ function StudentCard({ student, time }) {
   return `${formattedHours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")} ${period}`;
 };
 
+  function displayAttendance(status) {
+    if (status == 'late') {
+      return <div>
+      <IonIcon class='late-icon' size='lg' icon={alarmOutline}/>
+      <p style={{fontSize: '.8em'}}>Late</p>
+      </div>
+    } else if (status == 'halfday') {
+        return <div>
+        <IonIcon class='halfday-icon' size='lg' icon={heartHalf} />
+        <p style={{fontSize: '.8em'}}>Halfday</p>
+        </div>
+    } else if (status == 'present') {
+        return <>
+        <IonIcon class='check-icon' size='lg' icon={checkmarkCircle} />
+        <p style={{fontSize: '.8em'}}>Ontime</p>
+        </>
+    } else {
+        return <IonIcon class='ellipse-icon' size='lg' icon={ellipse} />
+    }
+
+  }
+
   return (
     <IonCard>
       <IonCardContent style={{ display: 'flex', flexDirection: 'row', justifyContent: 'between', alignItems: 'center' }}>
@@ -30,17 +52,16 @@ function StudentCard({ student, time }) {
           <IonText color='dark'>
             <span style={{ fontWeight: 'bold' }}>{ student }</span>
           </IonText>
-          { time && 
+          { time && <>
             <sm style={{ fontSize: '.9em'}}>At { formatTimeTo12Hour(time) }</sm>
+            </>
           }
         </div>
-        {time ? (<IonIcon class='check-icon' size='lg' icon={checkmarkCircle} />)
-          : (<IonIcon class='ellipse-icon' size='lg' icon={ellipse} />)
-        }
-        {/*<IonText color={`${time ? 'success' : 'danger'}`}>*/}
-          {/*<IonIcon class='check-icon' size='lg' icon={checkmarkCircle} />*/}
-          {/*<p>{ time ? 'Present' : 'Absent / not marked yet.'}</p>*/}
-        {/*</IonText>*/}
+        {/* {time ? (<IonIcon class='check-icon' size='lg' icon={checkmarkCircle} />)
+        } */}
+      
+      { displayAttendance(status) }
+
       </IonCardContent>
     </IonCard>
   );

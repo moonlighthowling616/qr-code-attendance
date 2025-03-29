@@ -26,7 +26,7 @@ function HomePageStudentList({ name, id, id_number }) {
 
   const deleteStudent = async (id) => {
     try {
-      if(alert('Are you sure you want to delete? records will be lost and cannot be recovered.')) {
+      if(confirm('Are you sure you want to delete? records will be lost and cannot be recovered.')) {
         await deleteStudentById(id);
       }
       setRecorded(!recorded);

@@ -138,7 +138,7 @@ export const queryAllPresents = async () => {
     attendances.student_id,
     attendances.day,
     attendances.time_in,
-    attendances.remarks,
+    attendances.remarks as remark,
     students.id AS student_id,
     students.name AS student_name,
     students.strand AS student_strand,
@@ -155,27 +155,55 @@ export const queryAllPresents = async () => {
     );
 };
 
-export const createAttendance = async(studentId: any) => {
+export const createAttendance = async (studentId: any) => {
   try {
-    const result = await database.query('SELECT id from students WHERE id_number=?', [studentId])
-    // return alert(JSON.stringify(result));
+    const result = await database.query('SELECT id FROM students WHERE id_number=?', [studentId]);
+
     if (!result.values.length) {
-      throw new Error('Student not found')
+      throw new Error('Student not found');
     }
+
     const currentDate = new Date();
     const day = currentDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
     const timeIn = currentDate.toTimeString().split(" ")[0]; // Format: HH:MM:SS
 
-    return await database.run(
-      `INSERT INTO attendances (student_id, day, time_in, remarks) 
-       VALUES (?, ?, ?, ?)`,
-      [result.values[0].id , day, timeIn, "ontime"] // Default remarks as 'ontime'
+    const timeInObj = new Date(`1970-01-01T${timeIn}Z`);
+    const eightAM = new Date("1970-01-01T08:00:00Z");
+    const twelvePM = new Date("1970-01-01T12:00:00Z");
+
+    let remarks = "ontime"; 
+    if (timeInObj >= eightAM && timeInObj < twelvePM) {
+      remarks = "late";
+    } else if (timeInObj >= twelvePM) {
+      remarks = "halfday";
+    }
+
+    const existingAttendance = await database.query(
+      'SELECT * FROM attendances WHERE student_id = ? AND day = ?',
+      [result.values[0].id, day]
     );
+
+    if (existingAttendance.values.length > 0) {
+      return await database.run(
+        `UPDATE attendances
+         SET time_in = ?, remarks = ?
+         WHERE student_id = ? AND day = ?`,
+        [timeIn, remarks, result.values[0].id, day]
+      );
+    } else {
+      return await database.run(
+        `INSERT INTO attendances (student_id, day, time_in, remarks)
+         VALUES (?, ?, ?, ?)`,
+        [result.values[0].id, day, timeIn, remarks]
+      );
+    }
+
   } catch (error) {
-    console.error("Failed to create attendance record:", error);
+    console.error("Failed to create or update attendance record:", error);
     throw error;
   }
 };
+
 
 export const queryAllAbsents = async () => {
   // open database
