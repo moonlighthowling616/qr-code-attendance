@@ -31,13 +31,13 @@ const NoStudents = () => (
         <IonText color="primary">Welcome!</IonText> Please click the button in the bottom right to get started.
       </p>
       
-      <IonText className="credits" style={{ fontSize: '0.9em', marginTop: '20px', display: 'block' }}>
-        Developed by <IonText color="primary">JynJo and Puting Lobo Studios | ©2025 </IonText>
-      </IonText>
+      <IonText className="credits" style={{ fontSize: '0.75em', marginTop: '20px', display: 'block' }}>
+  Developed by <IonText color="primary" style={{ fontSize: '0.75em' }}>
+    JynJo and Puting Lobo Studios | ©2025
+  </IonText>
+</IonText>
     </IonCol>
   </IonRow>
 );
 
 export default NoStudents;
-
-
