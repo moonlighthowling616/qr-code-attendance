@@ -6,6 +6,9 @@
 	padding: 20px 12px 20px 12px ;
 	flex-direction: column;
 }
+
+
+
 .home-content {
 	display: flex; 
 	align-items: center;

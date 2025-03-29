@@ -3,7 +3,7 @@ http://ionicframework.com/docs/theming/ */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 :root {
 	/** primary **/
-	--ion-color-primary: #ea9999;
+	--ion-color-primary: #FFC0CB  ;
 	--ion-color-primary-rgb: 56, 128, 255;
 	--ion-color-primary-contrast: #ffffff;
 	--ion-color-primary-contrast-rgb: 255, 255, 255;

@@ -82,7 +82,7 @@ export default function Attendances() {
 
   return (<>
     <IonPage>
-      <IonHeader>
+      <IonHeader className='ion-header'>
           <IonToolbar>
           	<IonTitle>eBeadle Sheet</IonTitle>
           </IonToolbar>
