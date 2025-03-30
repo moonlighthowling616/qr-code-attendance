@@ -91,10 +91,9 @@ export default function Attendances() {
             <IonTitle>eBeadle Sheet</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent className=" ion-padding">
-          <IonDatetimeButton datetime="datetime" />
-
-          <IonModal keepContentsMounted={true}>
+        <IonContent >
+          <IonDatetimeButton datetime="datetime"  style={{marginTop: '10px'}}/>
+          <IonModal keepContentsMounted={true} >
             <IonDatetime
               id="datetime"
               presentation="date"
@@ -113,13 +112,13 @@ export default function Attendances() {
               }}
             >
               <IonCol>Student Name</IonCol>
-              <IonCol>Actions</IonCol>
+              <IonCol>Status</IonCol>
             </IonRow>
           </IonGrid>
-
+          <IonList style={{ backgroundColor: "white" }}>
           {presents?.length > 0 && (
-            <IonList style={{ backgroundColor: "white" }}>
-              {presents.map((present) => {
+           
+              presents.map((present) => {
                 return (
                   <>
                     <StudentCard
@@ -130,17 +129,16 @@ export default function Attendances() {
                     />
                   </>
                 );
-              })}
-            </IonList>
+              })
           )}
 
           {absents?.length > 0 && (
-            <IonList style={{ backgroundColor: "white" }}>
-              {absents.map((absent) => (
+              absents.map((absent) => (
                 <StudentCard key={absent.id} student={absent.name} />
-              ))}
-            </IonList>
+              ))
           )}
+            </IonList>
+
           <IonLoading isOpen={loading} />
           <IonToast
             isOpen={toastOpen}

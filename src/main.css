@@ -11,13 +11,13 @@
   color: white;
   font-size: .6em;
   border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 12px;
 } 
 .delete-btn {
   padding: 12px ;
-  background-color: #dc3545;
+  background-color: #E0554A;
   color: white;
   font-size: .6em;
   border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 12px;
 }

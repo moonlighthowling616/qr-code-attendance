@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  IonIcon,
-  IonItem,
-  IonLabel,
-} from "@ionic/react";
+import { IonIcon, IonItem, IonLabel } from "@ionic/react";
 import { personCircle, checkmarkCircle } from "ionicons/icons";
 import "./StudentCard.css";
 
@@ -33,6 +29,7 @@ function StudentCard({ student, time, status }) {
             padding: "10px 20px",
             backgroundColor: "#1976D2 ",
             borderRadius: "4px",
+            boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 12px",
           }}
         >
           <h2
@@ -49,6 +46,7 @@ function StudentCard({ student, time, status }) {
             padding: "10px 20px",
             backgroundColor: "#FFD54F",
             borderRadius: "4px",
+            boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 12px",
           }}
         >
           <h2
@@ -65,6 +63,7 @@ function StudentCard({ student, time, status }) {
             padding: "10px 20px",
             backgroundColor: "#4CAF50",
             borderRadius: "4px",
+            boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 12px",
           }}
         >
           <h2
@@ -79,7 +78,11 @@ function StudentCard({ student, time, status }) {
   };
 
   return (
-    <IonItem lines="none" className="ion-no-padding">
+    <IonItem
+      lines="none"
+      className="ion-no-padding"
+      style={{ borderBottom: "1px solid #e0e0e0" }}
+    >
       <IonLabel
         style={{
           display: "flex",
@@ -102,7 +105,7 @@ function StudentCard({ student, time, status }) {
           <IonIcon
             color="secondary"
             icon={personCircle}
-            style={{ fontSize: "2em" }}
+            style={{ fontSize: "1em" }}
           ></IonIcon>
           <div
             style={{
@@ -120,21 +123,25 @@ function StudentCard({ student, time, status }) {
             )}
           </div>
         </div>
-      
-          {time ? indicator(status) : <div
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#D32F2F",
-            borderRadius: "4px",
-          }}
-        >
-          <h2
-            style={{ fontSize: "14px", fontWeight: "bolder", color: "white" }}
-          >
-            A
-          </h2>
-        </div>}
 
+        {time ? (
+          indicator(status)
+        ) : (
+          <div
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "#E0554A",
+              borderRadius: "4px",
+              boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 12px",
+            }}
+          >
+            <h2
+              style={{ fontSize: "14px", fontWeight: "bolder", color: "white" }}
+            >
+              A
+            </h2>
+          </div>
+        )}
       </IonLabel>
     </IonItem>
   );

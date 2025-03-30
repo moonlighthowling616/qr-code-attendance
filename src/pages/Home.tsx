@@ -87,7 +87,8 @@ export default function Home() {
                     backgroundColor: "#f4f4f4",
                     padding: "4px",
                     margin: "2px",
-                    fontWeight: "bolder",
+                    fontSize: '.9em',
+                    marginTop: '10px',
                   }}
                 >
                   <IonCol>Student Name</IonCol>

@@ -23,7 +23,11 @@ function HomePageStudentList({ name, id, id_number }) {
   };
 
   return (
-    <IonItem lines="none" className="ion-no-padding">
+    <IonItem
+      lines="none"
+      className="ion-no-padding"
+      style={{ borderBottom: "1px solid #e0e0e0" }}
+    >
       <IonLabel
         style={{
           display: "flex",
@@ -54,7 +58,9 @@ function HomePageStudentList({ name, id, id_number }) {
               flexDirection: "column",
             }}
           >
-            <h2 style={{ margin: 0, fontSize: ".8em", fontWeight: '500'}}>{name}</h2>
+            <h2 style={{ margin: 0, fontSize: ".8em", fontWeight: "500" }}>
+              {name}
+            </h2>
             <p style={{ margin: 0, color: "gray", fontSize: ".6em" }}>
               {id_number}
             </p>
