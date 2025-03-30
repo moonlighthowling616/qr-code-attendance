@@ -24,7 +24,7 @@ export default function AddStudent() {
   const [idNumber, setIdNumber] = useState("");
   const [strand, setStrand] = useState("");
   const [loading, setLoading] = useState(false);
-  const { recorded, setRecorded } = useContext(ScannerContext);
+  const { recorded, setRecorded: any } = useContext(ScannerContext);
 
   const handleSubmit = async () => {
     try {

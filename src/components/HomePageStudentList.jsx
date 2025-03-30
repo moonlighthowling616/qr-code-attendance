@@ -1,23 +1,6 @@
 import React, { useContext } from "react";
-import {
-  IonAvatar,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonItem,
-  IonItemOptions,
-  IonItemOption,
-  IonItemSliding,
-  IonLabel,
-  IonList,
-  IonTitle,
-  IonToolbar,
-  IonCard,
-  IonCardContent,
-  IonText,
-  IonButton,
-} from "@ionic/react";
-import { pencil, trash } from "ionicons/icons";
+import { IonItem, IonLabel, IonButton, IonIcon, IonBadge } from "@ionic/react";
+import { personCircle, pencil, trash } from "ionicons/icons"; // Import icons
 import { deleteStudentById } from "../dataservice.tsx";
 import { ScannerContext } from "../services/ScannerContext.jsx";
 
@@ -26,7 +9,11 @@ function HomePageStudentList({ name, id, id_number }) {
 
   const deleteStudent = async (id) => {
     try {
-      if(confirm('Are you sure you want to delete? records will be lost and cannot be recovered.')) {
+      if (
+        confirm(
+          "Are you sure you want to delete? records will be lost and cannot be recovered."
+        )
+      ) {
         await deleteStudentById(id);
       }
       setRecorded(!recorded);
@@ -36,42 +23,62 @@ function HomePageStudentList({ name, id, id_number }) {
   };
 
   return (
-    <>
-      <IonCard>
-        <IonCardContent
-          style={{ display: "flex", justifyContent: "space-between" }}
+    <IonItem lines="none" className="ion-no-padding">
+      <IonLabel
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "1em",
+          padding: "12px 16px",
+          flexWrap: "wrap", // Allows wrapping for smaller screens
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1em",
+            flex: "1 1 auto", // Flexible width
+          }}
         >
-          <div>
-            <IonText color="dark">
-              <span style={{ fontWeight: "bold" }}>{name}</span>
-            </IonText>
-            <sm style={{ fontSize: ".9em" }}>{id_number}</sm>
+          <IonIcon
+            color="secondary"
+            icon={personCircle}
+            style={{ fontSize: "2em" }}
+          ></IonIcon>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: ".8em", fontWeight: '500'}}>{name}</h2>
+            <p style={{ margin: 0, color: "gray", fontSize: ".6em" }}>
+              {id_number}
+            </p>
           </div>
-          <div style={{ display: "flex", flexDirection: "row", gap: "6px" }}>
-            <IonButton fill='outline'  shape='round' routerLink={`edit/${id}`}>
-              <IonIcon slot='icon-only' icon={pencil} />
-            </IonButton>
-            <IonButton fill='outline' shape='round' onClick={() => deleteStudent(id)}>
-              <IonIcon slot='icon-only' icon={trash} />
-            </IonButton>
-          </div>
-        </IonCardContent>
-      </IonCard>
-
-      {/*  <IonItemSliding>
-            <IonItem button={true}>
-              <IonLabel color='dark'>{ name }</IonLabel>
-            </IonItem>
-            <IonItemOptions slot="end">
-              <IonItemOption color="success" routerLink={`edit/${id}`}>
-                <IonIcon slot="icon-only" icon={pencil}></IonIcon>
-              </IonItemOption>
-              <IonItemOption color="danger" expandable={true} onClick={() => deleteStudent(id)}>
-                <IonIcon slot="icon-only" icon={trash}></IonIcon>
-              </IonItemOption>
-            </IonItemOptions>
-        </IonItemSliding>*/}
-    </>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5em",
+            flexWrap: "wrap", // Allows icons to stack on smaller screens
+          }}
+        >
+          <button
+            className="edit-btn"
+            onClick={() => alert("Edit functionality not implemented yet")}
+          >
+            <IonIcon icon={pencil} style={{ fontSize: "1.5em" }} />
+          </button>
+          <button className="delete-btn" onClick={() => deleteStudent(id)}>
+            <IonIcon icon={trash} style={{ fontSize: "1.5em" }} />
+          </button>
+        </div>
+      </IonLabel>
+    </IonItem>
   );
 }
 export default HomePageStudentList;

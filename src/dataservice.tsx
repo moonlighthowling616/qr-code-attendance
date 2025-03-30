@@ -1,8 +1,6 @@
 // SQLITE IMPORTS
-import { Plugins } from "@capacitor/core";
+import { CapacitorSQLite } from "@capacitor-community/sqlite";
 import { SQLiteConnection } from "@capacitor-community/sqlite";
-
-const { CapacitorSQLite } = Plugins;
 
 const mSQLite = new SQLiteConnection(CapacitorSQLite);
 let database: any;
@@ -35,6 +33,17 @@ export const initdb = async () => {
       );
     `);
 
+      // Insert initial data
+    await database.execute(`
+      INSERT INTO students (id, name, strand, id_number) VALUES
+      (1, 'Hanni Pham', 'IOS-CUL', 'S23-4123'),
+      (2, 'Danni', 'IOS-ICT', 'S23-4124'),
+      (3, 'Haerin', 'IOS-CUL', 'S23-1244'),
+      (4, 'Minji', 'IOS-CUL', 'S23-5131'),
+      (5, 'Hyein', 'IOS-ICT', 'S23-4598')
+      ON CONFLICT(id) DO NOTHING;
+    `);
+
     await database.execute(`
       CREATE TABLE IF NOT EXISTS attendances (
         id INTEGER PRIMARY KEY NOT NULL,
@@ -45,18 +54,8 @@ export const initdb = async () => {
         FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
     );
     `);
-
-
-    // Insert initial data
-    // await database.execute(`
-    //   INSERT INTO students (id, name, strand, id_number) VALUES
-    //   (1, 'Hanni Pham', 'IOS-CUL', 'S23-4123'),
-    //   (2, 'Danni', 'IOS-ICT', 'S23-4124'),
-    //   (3, 'Haerin', 'IOS-CUL', 'S23-1244'),
-    //   (4, 'Minji', 'IOS-CUL', 'S23-5131'),
-    //   (5, 'Hyein', 'IOS-ICT', 'S23-4598')
-    //   ON CONFLICT(id) DO NOTHING;
-    // `);
+    
+    console.log("Students inserted successfully");
 
     return database;
   } catch (e) {
