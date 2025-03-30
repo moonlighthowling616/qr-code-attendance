@@ -86,13 +86,15 @@ export default function AddStudent() {
               <IonInput 
                 label="Name" 
                 labelPlacement="floating"
+                placeholder="e.g. Ashvites, Reynard"
                 fill='outline'
                 value={name}
                 onIonInput={(e) => setName(e.detail.value!) } 
               />
               <IonInput 
                 label="ID Number" 
-                labelPlacement="floating" 
+                labelPlacement="floating"
+                placeholder="e.g. S23-0401"
                 fill='outline'
                 value={idNumber}
                 onIonInput={(e) => setIdNumber(e.detail.value!) } 
@@ -100,6 +102,7 @@ export default function AddStudent() {
               <IonInput 
                 label="Track, Grade & Section"
                 labelPlacement="floating" 
+                placeholder="e.g. TVL 12 - IOS"
                 fill='outline' 
                 value={strand}
                 onIonInput={(e) => setStrand(e.detail.value!) } 
