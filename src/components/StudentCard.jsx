@@ -1,65 +1,75 @@
 import React from 'react';
-import { IonText, IonCard, IonIcon, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
-import { alarm, alarmOutline, batteryHalf, checkmarkCircle, ellipse, heartHalf, shieldHalf, starHalf } from 'ionicons/icons'
-import './StudentCard.css'
+import { IonText, IonCard, IonIcon, IonCardContent } from '@ionic/react';
+import { alarm, alarmOutline, checkmarkCircle } from 'ionicons/icons';
+import './StudentCard.css';
 
 function StudentCard({ student, time, status }) {
+  
+  const formatTimeTo12Hour = (time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    let period = "AM";
+    let formattedHours = hours;
 
- const formatTimeTo12Hour = (time) => {
-  const [hours, minutes, _] = time.split(":").map((n) => Number(n));
-
-  let period = "AM";
-  let formattedHours = hours;
-
-  if (formattedHours >= 12) {
-    period = "PM";
-    if (formattedHours > 12) {
-      formattedHours -= 12;
+    if (formattedHours >= 12) {
+      period = "PM";
+      if (formattedHours > 12) {
+        formattedHours -= 12;
+      }
+    } else if (formattedHours === 0) {
+      formattedHours = 12; 
     }
-  } else if (formattedHours == 0) {
-    formattedHours = 12; 
-  }
 
-  return `${formattedHours}:${minutes.toString().padStart(2, "0")}:${period}`;
-};
+    return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${period}`;
+  };
 
-  function indicator(status) {
-    if (status == 'late') {
-      return <div>
-      <IonIcon class='late-icon' size='lg' icon={alarmOutline}/>
-      <p style={{fontSize: '.8em'}}>Late</p>
-      </div>
-    } else if (status == 'halfday') {
-        return <div>
-        <IonIcon class='halfday-icon' size='lg' icon={heartHalf} />
-        <p style={{fontSize: '.8em'}}>Halfday</p>
+  const indicator = (status) => {
+    if (status === 'late') {
+      return (
+        <div>
+          <IonIcon className='late-icon' size='lg' icon={alarmOutline} />
+          <p style={{ fontSize: '.8em' }}>Late</p>
         </div>
-    } else if (status == 'present') {
-        return <>
-        <IonIcon class='check-icon' size='lg' icon={checkmarkCircle} />
-        <p style={{fontSize: '.8em'}}>Ontime</p>
-        </>
-    } 
-  }
+      );
+    } else if (status === 'halfday') {
+      return (
+        <div>
+          <IonIcon className='halfday-icon' size='lg' icon={alarmOutline} />
+          <p style={{ fontSize: '.8em' }}>Half-day</p>
+        </div>
+      );
+    } else if (status === 'present') {
+      return (
+        <div>
+          <IonIcon className='check-icon' size='lg' icon={checkmarkCircle} />
+          <p style={{ fontSize: '.8em' }}>Present</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <IonCard>
-      <IonCardContent style={{ display: 'flex', flexDirection: 'row', justifyContent: 'between', alignItems: 'center' }}>
+      <IonCardContent style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ flexGrow: 1 }}>
           <IonText color='dark'>
-            <span style={{ fontWeight: 'bold' }}>{ student }</span>
+            <span style={{ fontWeight: 'bold' }}>{student}</span>
           </IonText>
-          { time && <>
-            <sm style={{ fontSize: '.9em'}}>Entered at { formatTimeTo12Hour(time) }</sm>
-            </>
-          }
+          {time && (
+            <small style={{ fontSize: '.9em' }}>Entered at {formatTimeTo12Hour(time)}</small>
+          )}
         </div>
-        {/* {time ? (<IonIcon class='check-icon' size='lg' icon={checkmarkCircle} />)
-        } */}
-      { time ? indicator(status) : <IonIcon class='ellipse-icon' size='lg' icon={ellipse} /> }
-
+        {time ? (
+          indicator(status)
+        ) : (
+          <div>
+            <IonIcon className='ellipse-icon' size='lg' icon={alarm} />
+            <p style={{ fontSize: '.8em' }}>Absent</p>
+          </div>
+        )}
       </IonCardContent>
     </IonCard>
   );
 }
+
 export default StudentCard;
