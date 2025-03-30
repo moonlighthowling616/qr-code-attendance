@@ -9,23 +9,23 @@ ion-card-content div {
 
 .check-icon {
 	font-size: 2.3rem;
-	color: #28a745;
+	color: green;
 }
 
 .late-icon {
 	font-size: 2.3rem;
-	color: #FFEB3B;
+	color: yellow;
 }
 
 .halfday-icon {
-	color: #2196F3;
+	color: orange;
 	font-size: 2.3rem;
 }
 
 
 .ellipse-icon {
 	font-size: 2.3rem;
-	color: lightgray;
+	color: red;
 }
 
 .edit-icon {
