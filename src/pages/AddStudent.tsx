@@ -18,7 +18,6 @@ import { createStudent, initdb } from "../dataservice.tsx";
 import "./AddStudent.css";
 
 export default function AddStudent() {
-  // """IYOT""" //Utin
 
   const history = useHistory();
   const [name, setName] = useState("");
@@ -57,7 +56,7 @@ export default function AddStudent() {
             <IonInput
               label="Name"
               labelPlacement="floating"
-              placeholder="Last Name, First Name M.I (e.g. Ashvites, Reynard C.)"
+              placeholder="e.g. Ashvites, Reynard"
               // fill="solid"
               color="primary"
               onIonInput={(e) => setName(e.detail.value!)}
@@ -65,15 +64,15 @@ export default function AddStudent() {
             <IonInput
               label="ID Number"
               labelPlacement="floating"
-              placeholder="SYY-1234 (e.g. S23-0401)"
+              placeholder="e.g. S23-0401"
               // fill="outline"
               onIonInput={(e) => setIdNumber(e.detail.value!)}
             />
             <IonInput
-              label="Additional Information"
+              label="Track, Grade & Section"
               labelPlacement="floating"
               // fill="outline"
-              placeholder="Track Grade - Section (e.g. TVL 12 - IOS)"
+              placeholder="e.g. TVL 12 - IOS"
               helperText="Please make sure the ID number is not taken."
               onIonInput={(e) => setStrand(e.detail.value!)}
             />
