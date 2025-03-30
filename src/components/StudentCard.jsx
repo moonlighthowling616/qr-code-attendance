@@ -1,10 +1,13 @@
-import React from 'react';
-import { IonText, IonCard, IonIcon, IonCardContent } from '@ionic/react';
-import { alarm, alarmOutline, checkmarkCircle } from 'ionicons/icons';
-import './StudentCard.css';
+import React from "react";
+import {
+  IonIcon,
+  IonItem,
+  IonLabel,
+} from "@ionic/react";
+import { personCircle, checkmarkCircle } from "ionicons/icons";
+import "./StudentCard.css";
 
 function StudentCard({ student, time, status }) {
-  
   const formatTimeTo12Hour = (time) => {
     const [hours, minutes] = time.split(":").map(Number);
     let period = "AM";
@@ -16,32 +19,59 @@ function StudentCard({ student, time, status }) {
         formattedHours -= 12;
       }
     } else if (formattedHours === 0) {
-      formattedHours = 12; 
+      formattedHours = 12;
     }
 
     return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${period}`;
   };
 
   const indicator = (status) => {
-    if (status === 'late') {
+    if (status === "late") {
       return (
-        <div>
-          <IonIcon className='late-icon' size='lg' icon={alarmOutline} />
-          <p style={{ fontSize: '.8em' }}>Late</p>
+        <div
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#1976D2 ",
+            borderRadius: "4px",
+          }}
+        >
+          <h2
+            style={{ fontSize: "14px", fontWeight: "bolder", color: "white" }}
+          >
+            L
+          </h2>
         </div>
       );
-    } else if (status === 'halfday') {
+    } else if (status === "halfday") {
       return (
-        <div>
-          <IonIcon className='halfday-icon' size='lg' icon={alarmOutline} />
-          <p style={{ fontSize: '.8em' }}>Half-day</p>
+        <div
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#FFD54F",
+            borderRadius: "4px",
+          }}
+        >
+          <h2
+            style={{ fontSize: "14px", fontWeight: "bolder", color: "white" }}
+          >
+            H
+          </h2>
         </div>
       );
-    } else if (status === 'present') {
+    } else if (status === "present") {
       return (
-        <div>
-          <IonIcon className='check-icon' size='lg' icon={checkmarkCircle} />
-          <p style={{ fontSize: '.8em' }}>Present</p>
+        <div
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#4CAF50",
+            borderRadius: "4px",
+          }}
+        >
+          <h2
+            style={{ fontSize: "14px", fontWeight: "bolder", color: "white" }}
+          >
+            P
+          </h2>
         </div>
       );
     }
@@ -49,26 +79,64 @@ function StudentCard({ student, time, status }) {
   };
 
   return (
-    <IonCard>
-      <IonCardContent style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ flexGrow: 1 }}>
-          <IonText color='dark'>
-            <span style={{ fontWeight: 'bold' }}>{student}</span>
-          </IonText>
-          {time && (
-            <small style={{ fontSize: '.9em' }}>Entered at {formatTimeTo12Hour(time)}</small>
-          )}
-        </div>
-        {time ? (
-          indicator(status)
-        ) : (
-          <div>
-            <IonIcon className='ellipse-icon' size='lg' icon={alarm} />
-            <p style={{ fontSize: '.8em' }}>Absent</p>
+    <IonItem lines="none" className="ion-no-padding">
+      <IonLabel
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "1em",
+          padding: "12px 16px",
+          flexWrap: "wrap", // Allows wrapping for smaller screens
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1em",
+            flex: "1 1 auto",
+          }}
+        >
+          <IonIcon
+            color="secondary"
+            icon={personCircle}
+            style={{ fontSize: "2em" }}
+          ></IonIcon>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: ".8em", fontWeight: "500" }}>
+              {student}
+            </h2>
+            {time && (
+              <p style={{ margin: 0, color: "gray", fontSize: ".6em" }}>
+                Entered at {formatTimeTo12Hour(time)}
+              </p>
+            )}
           </div>
-        )}
-      </IonCardContent>
-    </IonCard>
+        </div>
+      
+          {time ? indicator(status) : <div
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#D32F2F",
+            borderRadius: "4px",
+          }}
+        >
+          <h2
+            style={{ fontSize: "14px", fontWeight: "bolder", color: "white" }}
+          >
+            A
+          </h2>
+        </div>}
+
+      </IonLabel>
+    </IonItem>
   );
 }
 

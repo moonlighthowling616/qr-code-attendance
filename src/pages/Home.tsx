@@ -81,7 +81,7 @@ export default function Home() {
           <FabButton />
           {students?.length > 0 ? (
             <>
-              <IonGrid fixed={true}>
+              <IonGrid >
                 <IonRow
                   style={{
                     backgroundColor: "#f4f4f4",

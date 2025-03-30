@@ -40,7 +40,7 @@ function HomePageStudentList({ name, id, id_number }) {
             display: "flex",
             alignItems: "center",
             gap: "1em",
-            flex: "1 1 auto", // Flexible width
+            flex: "1 1 auto",
           }}
         >
           <IonIcon
