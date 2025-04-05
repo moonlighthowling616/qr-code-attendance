@@ -108,10 +108,8 @@ export const exportDatabase = async () => {
 };
 
 export const importDatabase = async (fileContent: string) => {
-  let connection: SQLiteConnection | null = null;
-
   try {
-    // Parse and validate JSON
+    // Parse the JSON content
     const importData = JSON.parse(fileContent);
     console.log("Parsed JSON:", importData);
 
@@ -119,14 +117,14 @@ export const importDatabase = async (fileContent: string) => {
       throw new Error("Invalid JSON format: Missing or invalid 'tables' array.");
     }
 
-    // 1. Clean up any existing connection
+    // Close any existing database connection
     try {
       await CapacitorSQLite.closeConnection({ database: "testdb" });
     } catch (e) {
       console.log("No existing connection to close");
     }
 
-    // 2. Delete existing database
+    // Delete the existing database
     try {
       await CapacitorSQLite.deleteDatabase({ database: "testdb" });
       console.log("Existing database deleted");
@@ -134,8 +132,8 @@ export const importDatabase = async (fileContent: string) => {
       console.log("No database to delete");
     }
 
-    // 3. Create fresh connection
-    connection = await mSQLite.createConnection(
+    // Create a new connection
+    const connection = await mSQLite.createConnection(
       "testdb",
       false,
       "no-encryption",
@@ -146,7 +144,7 @@ export const importDatabase = async (fileContent: string) => {
     await connection.open();
     console.log("Database connection opened");
 
-    // 4. Create tables
+    // Create tables
     for (const table of importData.tables) {
       if (!table.name || !table.schema) {
         throw new Error(`Invalid table definition: ${JSON.stringify(table)}`);
@@ -162,7 +160,7 @@ export const importDatabase = async (fileContent: string) => {
     }
     console.log("Tables created successfully");
 
-    // 5. Import data
+    // Insert data into tables
     for (const table of importData.tables) {
       if (table.values && table.values.length > 0) {
         const columns = table.schema
@@ -181,7 +179,7 @@ export const importDatabase = async (fileContent: string) => {
     }
     console.log("Data imported successfully");
 
-    // 6. Verify import
+    // Verify the import
     const tables = await connection.getTableList();
     console.log("Imported tables:", tables);
 
@@ -198,15 +196,6 @@ export const importDatabase = async (fileContent: string) => {
     console.error("Import failed:", error);
     alert(`Import failed: ${error.message}\nCheck console for details`);
     return false;
-  } finally {
-    if (connection) {
-      try {
-        await connection.close();
-        console.log("Connection closed");
-      } catch (e) {
-        console.error("Error closing connection:", e);
-      }
-    }
   }
 };
 
