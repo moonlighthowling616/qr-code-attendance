@@ -72,6 +72,26 @@ export const initdb = async () => {
 };
 
 
+export const resetDatabase = async () => {
+  try {
+    // 2. Delete the entire database file
+    await CapacitorSQLite.deleteDatabase({ database: "testdb" });
+    console.log("Database deleted successfully");
+
+    // 3. Reinitialize the database with fresh schema
+    await initdb();
+    console.log("Database reinitialized successfully");
+
+    // 4. Optional: Insert default data if needed
+    // await insertDefaultData();
+
+    return true;
+  } catch (error) {
+    console.error("Error resetting database:", error);
+    throw error;
+  }
+};
+
 export const exportDatabase = async () => {
   try {
     // 1. Export the database to JSON
@@ -177,20 +197,7 @@ export const importDatabase = async (fileContent: string) => {
         }
       }
     }
-    console.log("Data imported successfully");
 
-    // Verify the import
-    const tables = await connection.getTableList();
-    console.log("Imported tables:", tables);
-
-    for (const table of tables.values) {
-      const countResult = await connection.query(
-        `SELECT COUNT(*) as count FROM ${table}`
-      );
-      console.log(`Table ${table} has ${countResult.values[0].count} records`);
-    }
-
-    alert("Database imported successfully!");
     return true;
   } catch (error) {
     console.error("Import failed:", error);

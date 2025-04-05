@@ -54,15 +54,9 @@ import "./theme/variables.css";
 
 /* Custom styles*/
 import "./css/styles.css";
-import { Preferences } from '@capacitor/preferences';
 setupIonicReact();
 
 const App = () => {
-
-  useEffect(() => {
-    document.body.classList.remove('dark'); // Remove dark mode if applied
-    Preferences.set({ key: 'theme', value: 'light' }); // Save preference if needed
-  }, []);
 
   useEffect(() => {
     initdb().catch(() => window.alert("ERROR INITIALIZING"));

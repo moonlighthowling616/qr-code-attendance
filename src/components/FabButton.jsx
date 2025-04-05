@@ -8,17 +8,9 @@ function FabButton() {
   return (
     <>
         <IonFab slot="fixed" vertical="bottom" horizontal="end">
-          <IonFabButton>
+          <IonFabButton onClick={startScan}>
             <IonIcon icon={qrCodeOutline}></IonIcon>
           </IonFabButton>
-          <IonFabList side="top">
-            <IonFabButton  onClick={startScan}>
-              <IonIcon color='primary' icon={scan}></IonIcon>
-            </IonFabButton>
-            <IonFabButton routerLink='add-student'>
-              <IonIcon color='primary' icon={personAddOutline}></IonIcon>
-            </IonFabButton>
-          </IonFabList>
         </IonFab>
     </>
   );

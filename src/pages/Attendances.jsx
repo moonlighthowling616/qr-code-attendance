@@ -27,6 +27,7 @@ import {
 } from "../dataservice.tsx";
 import { ScannerContext } from "../services/ScannerContext.jsx";
 import { fetchLateTime } from "../dataservice.tsx";
+import FabButton from "../components/FabButton.jsx";
 
 export default function Attendances() {
   const [presents, setPresents] = useState();
@@ -177,7 +178,7 @@ export default function Attendances() {
               ))}
           </IonList>
 
-          <IonLoading isOpen={loading} />
+          <IonLoading isOpen={loading} message='Please wait...'/>
           <IonToast
             isOpen={toastOpen}
             position="bottom"
@@ -186,7 +187,10 @@ export default function Attendances() {
             onDidDismiss={() => setToastOpen(false)}
             duration={3000}
           ></IonToast>
+                  <FabButton />
+
         </IonContent>
+        
       </IonPage>
     </>
   );

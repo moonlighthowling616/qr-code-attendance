@@ -19,9 +19,9 @@ const NoStudents = () => (
   <IonRow className="ion-text-center ion-justify-content-center">
     <IonCol >
       <IonText
-        color="dark"
+        color="primary"
       >
-        <h1 style={{fontWeight: 'bold'}}>eBeadle: QR Code-Based Attendance Checker</h1>
+        <h1 style={{ fontWeight: 'bold' }}>eBeadle: QR Code-Based Attendance Checker</h1>
       </IonText>
       <img src="/assets/icon2.png" alt="icon" />
       <p>
@@ -37,7 +37,7 @@ const NoStudents = () => (
         style={{ fontSize: "0.75em", marginTop: "20px", display: "block" }}
       >
         Developed by{" "}
-        <IonText color="dark" style={{ fontSize: "0.75em" }}>
+        <IonText color="primary" style={{ fontSize: "0.75em" }}>
           JynJo and Puting Lobo Studios | ©2024-2025
         </IonText>
       </IonText>

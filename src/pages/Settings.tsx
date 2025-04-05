@@ -9,15 +9,46 @@ import {
   IonButton,
   IonAlert,
   IonIcon,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonCol,
+  IonGrid,
+  IonRow,
+  IonText,
 } from "@ionic/react";
-import { setLateTime, fetchLateTime, exportDatabase, importDatabase } from "../dataservice.js";
-import { App } from "@capacitor/app"; 
-import { fileTrayOutline } from "ionicons/icons";
+import {
+  setLateTime,
+  fetchLateTime,
+  exportDatabase,
+  importDatabase,
+  resetDatabase,
+} from "../dataservice.js";
+import { App } from "@capacitor/app";
+import {
+  cloudDownloadOutline,
+  cloudUploadOutline,
+  refreshOutline,
+} from "ionicons/icons";
 
 function Settings() {
-  const [timeInput, setTimeInput] = useState();
+  const [timeInput, setTimeInput] = useState("");
   const [showRestartAlert, setShowRestartAlert] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null); // State for the selected file
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleReset = async () => {
+    try {
+      if (confirm("Are you sure you want to reset the database? This action cannot be undone.")) {
+        await resetDatabase();
+        alert("Database reset successfully.");
+        setShowRestartAlert(true);
+      }
+
+    } catch (err: any) {
+      alert("Failed to reset database: " + err.message);
+    }
+  };
 
   const setTimeSubmitHandler = async () => {
     try {
@@ -25,8 +56,6 @@ function Settings() {
         return alert("Please enter a valid time.");
       }
       await setLateTime(timeInput);
-
-      // Show the restart alert
       setShowRestartAlert(true);
     } catch (err) {
       alert(err);
@@ -44,16 +73,15 @@ function Settings() {
         alert(err);
       }
     };
-
     fetchTime();
   }, []);
 
   const handleRestart = () => {
-    App.exitApp(); 
+    App.exitApp();
   };
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
     }
@@ -64,27 +92,23 @@ function Settings() {
       alert("Please select a file first");
       return;
     }
-  
+
     try {
-      // Read file content
       const content = await selectedFile.text();
-  
-      // Validate JSON format
+
       try {
-        JSON.parse(content); // Ensure the file content is valid JSON
+        JSON.parse(content);
       } catch (err) {
         alert("Invalid JSON file. Please check the file content.");
         return;
       }
-  
-      // Execute import
+
       const success = await importDatabase(content);
-  
+
       if (success) {
-        alert("Database imported successfully!");
-        // Refresh your app data here if needed
+        setShowRestartAlert(true);
       }
-    } catch (err) {
+    } catch (err: any) {
       alert(`File processing failed: ${err.message}`);
     }
   };
@@ -104,7 +128,7 @@ function Settings() {
           type="time"
           value={timeInput}
           helperText="The default late time is 7:40 AM"
-          onIonInput={(e) => setTimeInput(e.detail.value)}
+          onIonInput={(e) => setTimeInput(e.detail.value!)}
         />
         <IonButton
           expand="block"
@@ -114,33 +138,82 @@ function Settings() {
           SET LATE TIME
         </IonButton>
 
-      {/* BACKUP OPTIONS */}
-        <div style={{
-          marginTop: "20px",
-          padding: "10px",
-          backgroundColor: "#f0f0f0",
-          borderRadius: "8px",
-        }}>
-          <IonButton onClick={exportDatabase} expand="full" color="primary"> 
-            Create Backup{" "} <IonIcon icon={fileTrayOutline}></IonIcon>
-          </IonButton>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="12">
+              <IonCard>
+                <IonCardHeader>
+                  <IonCardTitle>Backup & Restoration</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonGrid>
+                    <IonRow>
+                      <IonCol size="6">
+                        <IonButton expand="block" onClick={exportDatabase} color="primary">
+                          <IonIcon icon={cloudUploadOutline} slot="start" />
+                          Create Backup
+                        </IonButton>
+                      </IonCol>
+                      <IonCol size="6">
+                        <div style={{ position: "relative" }}>
+                          <IonButton
+                            expand="block"
+                            color="secondary"
+                            onClick={() => document.getElementById("fileInput")?.click()}
+                          >
+                            <IonIcon icon={cloudDownloadOutline} slot="start" />
+                            Restore
+                          </IonButton>
+                          <input
+                            id="fileInput"
+                            type="file"
+                            accept=".json"
+                            onChange={handleFileChange}
+                            style={{
+                              position: "absolute",
+                              opacity: 0,
+                              width: "100%",
+                              height: "100%",
+                              top: 0,
+                              left: 0,
+                            }}
+                          />
+                        </div>
+                      </IonCol>
+                    </IonRow>
+                    {selectedFile && (
+                      <IonRow>
+                        <IonCol>
+                          <p>Selected: {selectedFile.name}</p>
+                          <IonButton expand="block" onClick={handleImport} color="success">
+                            Confirm Import
+                          </IonButton>
+                        </IonCol>
+                      </IonRow>
+                    )}
+                  </IonGrid>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+          </IonRow>
 
-          {/* File Picker */}
-          <input
-            type="file"
-            accept=".json"
-            onChange={handleFileChange}
-            style={{ marginTop: "10px", marginBottom: "10px" }}
-          />
-          <IonButton expand="block" onClick={handleImport}>
-            Import Database
-          </IonButton>
+          <IonRow>
+            <IonCol size="12">
+              <IonCard color="warning">
+                <IonCardHeader>
+                  <IonCardTitle>Danger Zone</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonButton expand="block" onClick={handleReset} color="danger" fill="outline">
+                    <IonIcon icon={refreshOutline} slot="start" />
+                    Reset Database
+                  </IonButton>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
 
-        </div>
-
-
-
-      {/* ALERTS */}
         <IonAlert
           isOpen={showRestartAlert}
           onDidDismiss={() => setShowRestartAlert(false)}
@@ -149,11 +222,19 @@ function Settings() {
           buttons={[
             {
               text: "Restart",
-              handler: handleRestart, 
+              handler: handleRestart,
             },
           ]}
         />
-
+          <IonText
+                // className="credits"
+                style={{ fontSize: "0.75em", marginTop: "20px", display: "block", textAlign: "center" }}
+              >
+                <p>TVL 12 - ST. ISIDORE OF SEVILLE BATCH 2024-2025</p>
+                {/* <IonText color="primary" style={{ fontSize: "0.75em" }}> */}
+                  {/* JynJo and Puting Lobo Studios | ©2024-2025 */}
+                {/* </IonText> */}
+              </IonText>
       </IonContent>
     </IonPage>
   );
