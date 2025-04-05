@@ -1,9 +1,9 @@
 import React from "react";
 import { IonIcon, IonItem, IonLabel } from "@ionic/react";
-import { personCircle, checkmarkCircle } from "ionicons/icons";
+import { personCircle } from "ionicons/icons";
 import "./StudentCard.css";
 
-function StudentCard({ student, time, status }) {
+function StudentCard({ student, time, lateTime, status }) {
   const formatTimeTo12Hour = (time) => {
     const [hours, minutes] = time.split(":").map(Number);
     let period = "AM";
@@ -21,13 +21,39 @@ function StudentCard({ student, time, status }) {
     return `${formattedHours}:${minutes.toString().padStart(2, "0")} ${period}`;
   };
 
-  const indicator = (status) => {
-    if (status === "late") {
+  const convertTo24Hour = (time) => {
+    const [timePart, modifier] = time.split(" ");
+    let [hours, minutes] = timePart.split(":").map(Number);
+
+    if (modifier === "PM" && hours !== 12) {
+      hours += 12;
+    } else if (modifier === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:00`;
+  };
+
+  const indicator = (time, lateTime) => {
+    const timeInObj = new Date(`1970-01-01T${time}Z`);
+    const lateTimeObj = new Date(`1970-01-01T${convertTo24Hour(lateTime)}Z`);
+    const twelvePM = new Date("1970-01-01T12:00:00Z");
+
+    let remarks = "ontime";
+    if (timeInObj >= lateTimeObj && timeInObj < twelvePM) {
+      remarks = "late";
+    } else if (timeInObj >= twelvePM) {
+      remarks = "halfday";
+    }
+
+    if (remarks === "late") {
       return (
         <div
           style={{
             padding: "10px 20px",
-            backgroundColor: "#1976D2 ",
+            backgroundColor: "#1976D2",
             borderRadius: "4px",
             boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 12px",
           }}
@@ -39,7 +65,7 @@ function StudentCard({ student, time, status }) {
           </h2>
         </div>
       );
-    } else if (status === "halfday") {
+    } else if (remarks === "halfday") {
       return (
         <div
           style={{
@@ -56,7 +82,7 @@ function StudentCard({ student, time, status }) {
           </h2>
         </div>
       );
-    } else if (status === "present") {
+    } else if (remarks === "ontime") {
       return (
         <div
           style={{
@@ -125,7 +151,7 @@ function StudentCard({ student, time, status }) {
         </div>
 
         {time ? (
-          indicator(status)
+          indicator(time, lateTime)
         ) : (
           <div
             style={{

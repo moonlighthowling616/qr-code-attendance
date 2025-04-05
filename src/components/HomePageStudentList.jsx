@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { IonItem, IonLabel, IonButton, IonIcon, IonBadge } from "@ionic/react";
-import { personCircle, pencil, trash } from "ionicons/icons"; // Import icons
+import { personCircle, createOutline, trash } from "ionicons/icons"; // Import icons
 import { deleteStudentById } from "../dataservice.tsx";
 import { ScannerContext } from "../services/ScannerContext.jsx";
 
@@ -73,15 +73,16 @@ function HomePageStudentList({ name, id, id_number }) {
             flexWrap: "wrap", // Allows icons to stack on smaller screens
           }}
         >
-          <button
-            className="edit-btn"
-            onClick={() => alert("Edit functionality not implemented yet")}
+          <IonButton
+            color="light"
+            routerLink={`edit/${id}`}
+            // onClick={() => alert("Edit functionality not implemented yet")}
           >
-            <IonIcon icon={pencil} style={{ fontSize: "1.5em" }} />
-          </button>
-          <button className="delete-btn" onClick={() => deleteStudent(id)}>
-            <IonIcon icon={trash} style={{ fontSize: "1.5em" }} />
-          </button>
+            <IonIcon slot="icon-only" icon={createOutline} />
+          </IonButton>
+          <IonButton color="light" onClick={() => deleteStudent(id)}>
+            <IonIcon slot="icon-only" icon={trash} />
+          </IonButton>
         </div>
       </IonLabel>
     </IonItem>

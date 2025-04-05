@@ -2,7 +2,7 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  IonToast
+  IonAlert
 } from '@ionic/react'
 import { useState, useEffect, useContext } from 'react';
 import {
@@ -25,13 +25,13 @@ export default function Scanner() {
           </IonFabButton>
       </IonFab>
 
-      <IonToast
+      {/* <IonToast
         isOpen={isOpen}
-        position='bottom'
-        positionAnchor='footer'
+        header="Success"
         message="Attendance recorded."
-        duration={3000}
-      ></IonToast>
+        buttons={['Close']}
+        onDidDismiss={() => setIsOpen(false)}
+      ></IonToast> */}
 
     </>
     );

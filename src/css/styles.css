@@ -32,5 +32,17 @@ ion-button {
 }
 
 ion-card {
-	box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+	box-shadow: rgba(190, 176, 176, 0.1) 0px 1px 2px 0px;
+}
+ion-header {
+	background: white;
+	--border: none !important;
+	box-shadow: none !important;
+}
+ion-toolbar {
+	/* padding: 8px !important; */
+	/* border-bottom-left-radius: 12px; */
+	/* border-bottom-right-radius: 12px; */
+	--background: #0D63FD;
+	--color: 'white';
 }

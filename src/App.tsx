@@ -19,6 +19,7 @@ import Home from "./pages/Home.tsx";
 import Attendances from "./pages/Attendances.jsx";
 import AddStudent from "./pages/AddStudent.tsx";
 import EditStudent from "./pages/EditStudent.tsx";
+import Settings from "./pages/Settings.jsx";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 
@@ -36,7 +37,7 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 
 /* Ionic icons */
-import { home, homeOutline, calendarOutline, calendar, clipboardOutline, clipboard } from "ionicons/icons";
+import { home, homeOutline, calendarOutline, calendar, clipboardOutline, personCircleOutline ,clipboard, settingsOutline, settings, personCircle } from "ionicons/icons";
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -53,11 +54,16 @@ import "./theme/variables.css";
 
 /* Custom styles*/
 import "./css/styles.css";
-
-import { useLocation } from "react-router-dom";
+import { Preferences } from '@capacitor/preferences';
 setupIonicReact();
 
 const App = () => {
+
+  useEffect(() => {
+    document.body.classList.remove('dark'); // Remove dark mode if applied
+    Preferences.set({ key: 'theme', value: 'light' }); // Save preference if needed
+  }, []);
+
   useEffect(() => {
     initdb().catch(() => window.alert("ERROR INITIALIZING"));
   }, []);
@@ -75,6 +81,18 @@ const App = () => {
       icon: clipboardOutline,
       activeIcon: clipboard,
     },
+    {
+      name: 'students',
+      url: '/add-student',
+      icon: personCircleOutline,
+      activeIcon: personCircle,
+    },
+    {
+      name: 'settings',
+      url: '/settings',
+      icon: settingsOutline,
+      activeIcon: settings,
+    }
   ];
 
   const [activeTab, setActiveTab] = useState(tabs[0].name);
@@ -101,6 +119,11 @@ const App = () => {
             <Route
               path="/edit/:id"
               render={() => <EditStudent />}
+              exact={true}
+            />
+            <Route
+              path="/settings"
+              render={() => <Settings />}
               exact={true}
             />
           </IonRouterOutlet>

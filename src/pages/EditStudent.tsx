@@ -82,6 +82,7 @@ export default function AddStudent() {
               label="Name"
               labelPlacement="floating"
               placeholder="e.g. Ashvites, Reynard"
+              color="primary"
               fill="outline"
               value={name}
               onIonInput={(e) => setName(e.detail.value!)}
@@ -89,9 +90,11 @@ export default function AddStudent() {
             <IonInput
               label="ID Number"
               labelPlacement="floating"
-              placeholder="e.g. S23-0401"
+              placeholder="e.g. S23-****"
+              // color="light"
               fill="outline"
               value={idNumber}
+
               onIonInput={(e) => setIdNumber(e.detail.value!)}
             />
             <IonInput
@@ -102,13 +105,12 @@ export default function AddStudent() {
               value={strand}
               onIonInput={(e) => setStrand(e.detail.value!)}
             />
-            <button
+            <IonButton
               onClick={handleSubmit}
               // color="primary"
-              className="submit-btn"
             >
               Update
-            </button>
+            </IonButton>
           </div>
           <IonLoading isOpen={loading} message="" />
         </IonContent>

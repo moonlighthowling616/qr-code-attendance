@@ -18,47 +18,52 @@ export const initdb = async () => {
       "testdb",
       false,
       "no-encryption",
-      1
+      1,
+      false // readonly argument
     );
 
-    // open the database
+    // Open the database
     await database.open();
-    // Define and create the table
+    // REMOVING TABLES FOR TESTING
+    // await database.execute("DROP TABLE IF EXISTS students;");
+    // await database.execute("DROP TABLE IF EXISTS attendances;");
+    // await database.execute("DROP TABLE IF EXISTS late_time;");
+
+    // Create tables
     await database.execute(`
       CREATE TABLE IF NOT EXISTS students (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id INTEGER PRIMARY KEY NOT NULL ,
         name TEXT NOT NULL,
         strand TEXT NOT NULL,
         id_number TEXT NOT NULL UNIQUE
       );
     `);
 
-      // Insert initial data
-    await database.execute(`
-      INSERT INTO students (id, name, strand, id_number) VALUES
-      (1, 'Hanni Pham', 'IOS-CUL', 'S23-4123'),
-      (2, 'Danni', 'IOS-ICT', 'S23-4124'),
-      (3, 'Haerin', 'IOS-CUL', 'S23-1244'),
-      (4, 'Minji', 'IOS-CUL', 'S23-5131'),
-      (5, 'Hyein', 'IOS-ICT', 'S23-4598')
-      ON CONFLICT(id) DO NOTHING;
-    `);
-
     await database.execute(`
       CREATE TABLE IF NOT EXISTS attendances (
-        id INTEGER PRIMARY KEY NOT NULL,
+        id INTEGER PRIMARY KEY NOT NULL ,
         student_id INTEGER NOT NULL,
         day DATE NOT NULL,
         time_in TIME NOT NULL,
-        remarks TEXT CHECK(remarks IN ('ontime', 'late', 'halfday')) DEFAULT 'ontime',
         FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
-    );
+      );
     `);
-    
-    console.log("Students inserted successfully");
 
+    await database.execute(`
+      CREATE TABLE IF NOT EXISTS late_time (
+        id INTEGER PRIMARY KEY NOT NULL,
+        time TEXT DEFAULT '7:40 AM'
+      );
+    `);
+
+    // await database.run(`
+    //   INSERT OR IGNORE INTO late_time (time) VALUES ('7:40')
+    // `);
+
+    console.log("Database initialized successfully");
     return database;
   } catch (e) {
+    console.error("Error initializing database:", e);
     return null;
   }
 };
@@ -114,10 +119,11 @@ export const createStudent = async (studentData: any) => {
   try {
     const { name, strand, id_number } = studentData;
     return await database.run(
-      "INSERT INTO students (name,strand,id_number) VALUES(?,?,?)",
+      "INSERT INTO students (name,strand, id_number) VALUES(?,?,?)",
       [name, strand, id_number]
     );
-  } catch(err) {
+  } catch (err) {
+    alert("err" + JSON.stringify(err));
     throw err;
   }
 };
@@ -128,13 +134,12 @@ export const queryAllPresents = async () => {
 
   // query to get all of the contacts from database
 
-  return database.query( `
+  return database.query(`
     SELECT 
     attendances.id AS attendance_id,
     attendances.student_id,
     attendances.day,
     attendances.time_in,
-    attendances.remarks as remark,
     students.id AS student_id,
     students.name AS student_name,
     students.strand AS student_strand,
@@ -147,61 +152,48 @@ export const queryAllPresents = async () => {
         attendances.student_id = students.id
     WHERE 
         attendances.day = DATE('now');  -- This gets the current date
-    ` 
-    );
+    `);
 };
 
 export const createAttendance = async (studentId: any) => {
   try {
-    const result = await database.query('SELECT id FROM students WHERE id_number=?', [studentId]);
+    const result = await database.query(
+      "SELECT id FROM students WHERE id_number=?",
+      [studentId]
+    );
 
     if (!result.values.length) {
-      throw new Error('Student not found');
+      throw new Error("Student not found");
     }
-
-    // return alert(JSON.stringify(result))
 
     const currentDate = new Date();
     const day = currentDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
     const timeIn = currentDate.toTimeString().split(" ")[0]; // Format: HH:MM:SS
 
-    const timeInObj = new Date(`1970-01-01T${timeIn}Z`);
-    const eightAM = new Date("1970-01-01T08:00:00Z");
-    const twelvePM = new Date("1970-01-01T12:00:00Z");
-
-    let remarks = "ontime"; 
-    if (timeInObj >= eightAM && timeInObj < twelvePM) {
-      remarks = "late";
-    } else if (timeInObj >= twelvePM) {
-      remarks = "halfday";
-    }
-
     const existingAttendance = await database.query(
-      'SELECT * FROM attendances WHERE student_id = ? AND day = ?',
+      "SELECT * FROM attendances WHERE student_id = ? AND day = ?",
       [result.values[0].id, day]
     );
 
     if (existingAttendance.values.length > 0) {
       return await database.run(
         `UPDATE attendances
-         SET time_in = ?, remarks = ?
+         SET time_in = ?,
          WHERE student_id = ? AND day = ?`,
-        [timeIn, remarks, result.values[0].id, day]
+        [timeIn, result.values[0].id, day]
       );
     } else {
       return await database.run(
-        `INSERT INTO attendances (student_id, day, time_in, remarks)
-         VALUES (?, ?, ?, ?)`,
-        [result.values[0].id, day, timeIn, remarks]
+        `INSERT INTO attendances (student_id, day, time_in)
+         VALUES (?, ?, ?)`,
+        [result.values[0].id, day, timeIn]
       );
     }
-
   } catch (error) {
     console.error("Failed to create or update attendance record:", error);
     throw error;
   }
 };
-
 
 export const queryAllAbsents = async () => {
   // open database
@@ -209,24 +201,22 @@ export const queryAllAbsents = async () => {
 
   // query to get all of the contacts from database
 
-  return database.query( `
+  return database.query(`
     SELECT students.id, students.name, students.strand, students.id_number
     FROM students
     LEFT JOIN attendances ON students.id = attendances.student_id AND attendances.day = DATE('now')
     WHERE attendances.id IS NULL;
-    ` 
-    );
+    `);
 };
 
-
-export const filterPresentAttendances = async(date: any) => {
-  return await database.query(`
+export const filterPresentAttendances = async (date: any) => {
+  return await database.query(
+    `
     SELECT 
     attendances.id AS attendance_id,
     attendances.student_id,
     attendances.day,
     attendances.time_in,
-    attendances.remarks as remark,
     students.id AS student_id,
     students.name AS student_name,
     students.strand AS student_strand,
@@ -238,17 +228,63 @@ export const filterPresentAttendances = async(date: any) => {
     ON 
         attendances.student_id = students.id
     WHERE 
-        attendances.day = ?;
-  `, [date])
-}
+        attendances.day = ?;  -- This gets the current date
+  `,[date]
+  );
+};
 
-export const filterAbsentAttendances = async(date: any) => {
-  return await database.query(`
+export const filterAbsentAttendances = async (date: any) => {
+  return await database.query(
+    `
     SELECT students.id, students.name, students.strand, students.id_number
     FROM students
     LEFT JOIN attendances 
     ON students.id = attendances.student_id 
     AND attendances.day = ?
     WHERE attendances.id IS NULL;
-  `, [date])
-}
+  `,
+  [date]
+  );
+};
+
+export const setLateTime = async (time: string) => {
+  try {
+    if (!time) {
+      throw new Error("Time cannot be null or undefined");
+    }
+
+      return await database.run(`
+        INSERT INTO late_time (time) VALUES (?)
+      `, [time]);
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const fetchLateTime = async () => {
+  try {
+    await database.open();
+    return await database.query(`
+      SELECT * FROM late_time
+      ORDER BY id DESC
+      LIMIT 1
+    `);
+  } catch (err) {
+    throw err;
+  }
+};
+
+const convertTo24Hour = (time: string): string => {
+  const [timePart, modifier] = time.split(" ");
+  let [hours, minutes] = timePart.split(":").map(Number);
+
+  if (modifier === "PM" && hours !== 12) {
+    hours += 12;
+  } else if (modifier === "AM" && hours === 12) {
+    hours = 0;
+  }
+
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:00`;
+};

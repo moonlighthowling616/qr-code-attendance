@@ -1,49 +1,25 @@
 import {
-  useIonLoading,
-  IonAvatar,
-  IonCard,
-  IonCardSubtitle,
-  IonText,
   IonContent,
-  IonCardContent,
-  IonLabel,
   IonLoading,
   IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
-  IonFab,
-  IonFabButton,
-  IonIcon,
-  IonRouterLink,
-  IonCardHeader,
-  IonCardTitle,
-  IonButton,
-  useIonViewWillEnter,
-  IonSearchbar,
   IonList,
-  IonRow,
-  IonGrid,
-  IonCol,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
 } from "@ionic/react";
 import { useState, useEffect, useContext } from "react";
 import StudentLists from "../components/StudentLists.jsx";
 import NoStudents from "../components/NoStudents.jsx";
 import HomePageStudentList from "../components/HomePageStudentList.jsx";
 import { ScannerContext } from "../services/ScannerContext.jsx";
-import {
-  add,
-  personAddOutline,
-  people,
-  createOutline,
-  trashOutline,
-} from "ionicons/icons";
+
 import "./Home.css";
 
 import {
   queryAllStudents,
   initdb,
-  deleteStudentById,
 } from "../dataservice.tsx";
 import FabButton from "../components/FabButton.jsx";
 
@@ -51,6 +27,15 @@ export default function Home() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const { recorded, setRecorded } = useContext(ScannerContext);
+ 
+  function generateStudents() {
+    const newItems = []
+
+    for (let i = 0; i < 10; i++) {
+      newItems.push()
+    }
+
+  }
 
   useEffect(() => {
     initdb()
@@ -73,7 +58,7 @@ export default function Home() {
       <IonPage>
         <IonHeader className="ion-header">
           <IonToolbar>
-            <IonTitle style={{ textAlign: "center" }}>Home</IonTitle>
+            <IonTitle style={{ textAlign: "center" }}>How       me</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent className="">
@@ -81,20 +66,9 @@ export default function Home() {
           <FabButton />
           {students?.length > 0 ? (
             <>
-              <IonGrid >
-                <IonRow
-                  style={{
-                    backgroundColor: "#f4f4f4",
-                    padding: "4px",
-                    margin: "2px",
-                    fontSize: '.9em',
-                    marginTop: '10px',
-                  }}
-                >
-                  <IonCol>Student Name</IonCol>
-                  <IonCol>Actions</IonCol>
-                </IonRow>
-              </IonGrid>
+             {/* <div>
+              <h4 style={{textAlign:'center', fontWeight: 'bold'}}>Student List</h4>
+             </div> */}
 
               <IonList style={{backgroundColor: "white"}}>
                 {students.map((student, index) => (
@@ -110,7 +84,7 @@ export default function Home() {
           ) : (
             <NoStudents />
           )}
-          <IonLoading isOpen={loading} message="" />
+          <IonLoading isOpen={loading} message="Please wait..." />
         </IonContent>
       </IonPage>
       {/* Add student modal*/}

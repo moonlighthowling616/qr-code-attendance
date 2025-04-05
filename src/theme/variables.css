@@ -2,8 +2,10 @@
 http://ionicframework.com/docs/theming/ */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 :root {
+	--ion-background-color: pink;
 	/** primary **/
-	--ion-color-primary: #F4A6C1   ;
+	/* --ion-color-primary: #E41B70; */
+	--ion-color-primary: #3D8BFD;
 	--ion-color-primary-rgb: 56, 128, 255;
 	--ion-color-primary-contrast: #ffffff;
 	--ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -52,12 +54,12 @@ http://ionicframework.com/docs/theming/ */
 	--ion-color-danger-tint: #E0554A;
 
 	/** dark **/
-	--ion-color-dark: #222428;
+	/* --ion-color-dark: #222428;
 	--ion-color-dark-rgb: 34, 36, 40;
 	--ion-color-dark-contrast: #ffffff;
 	--ion-color-dark-contrast-rgb: 255, 255, 255;
 	--ion-color-dark-shade: #1e2023;
-	--ion-color-dark-tint: #383a3e;
+	--ion-color-dark-tint: #383a3e; */
 
 	/** medium **/
 	--ion-color-medium: #92949c;
