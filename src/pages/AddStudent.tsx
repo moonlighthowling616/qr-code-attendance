@@ -55,14 +55,14 @@ export default function AddStudent() {
               labelPlacement="floating"
               placeholder="e.g. Ashvites, Reynard"
               color="primary"
-              fill="outline"
+              // fill="outline"
               onIonInput={(e) => setName(e.detail.value!)}
             />
             <IonInput
               label="ID Number"
               labelPlacement="floating"
               placeholder="e.g. S23-0401"
-              fill="outline"
+              // fill="outline"
               helperText="Please make sure the ID number is not taken."
               onIonInput={(e) => setIdNumber(e.detail.value!)}
               required
@@ -70,7 +70,7 @@ export default function AddStudent() {
             <IonInput
               label="Track, Grade & Section"
               labelPlacement="floating"
-              fill="outline"
+              // fill="solid"
               placeholder="e.g. TVL 12 - IOS"
               onIonInput={(e) => setStrand(e.detail.value!)}
             />

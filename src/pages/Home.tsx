@@ -28,15 +28,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const { recorded, setRecorded } = useContext(ScannerContext);
  
-  function generateStudents() {
-    const newItems = []
-
-    for (let i = 0; i < 10; i++) {
-      newItems.push()
-    }
-
-  }
-
   useEffect(() => {
     initdb()
       .then((db) => {
@@ -58,7 +49,7 @@ export default function Home() {
       <IonPage>
         <IonHeader className="ion-header">
           <IonToolbar>
-            <IonTitle style={{ textAlign: "center" }}>How       me</IonTitle>
+            <IonTitle style={{ textAlign: "center" }}>Home</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent className="">

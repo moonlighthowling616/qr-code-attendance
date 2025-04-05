@@ -19,7 +19,7 @@ import Home from "./pages/Home.tsx";
 import Attendances from "./pages/Attendances.jsx";
 import AddStudent from "./pages/AddStudent.tsx";
 import EditStudent from "./pages/EditStudent.tsx";
-import Settings from "./pages/Settings.jsx";
+import Settings from "./pages/Settings.tsx";
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
 

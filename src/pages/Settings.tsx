@@ -8,13 +8,16 @@ import {
   IonInput,
   IonButton,
   IonAlert,
+  IonIcon,
 } from "@ionic/react";
-import { setLateTime, fetchLateTime } from "../dataservice.tsx";
+import { setLateTime, fetchLateTime, exportDatabase, importDatabase } from "../dataservice.js";
 import { App } from "@capacitor/app"; 
+import { fileTrayOutline } from "ionicons/icons";
 
 function Settings() {
   const [timeInput, setTimeInput] = useState();
   const [showRestartAlert, setShowRestartAlert] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null); // State for the selected file
 
   const setTimeSubmitHandler = async () => {
     try {
@@ -49,11 +52,48 @@ function Settings() {
     App.exitApp(); 
   };
 
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleImport = async () => {
+    if (!selectedFile) {
+      alert("Please select a file first");
+      return;
+    }
+  
+    try {
+      // Read file content
+      const content = await selectedFile.text();
+  
+      // Validate JSON format
+      try {
+        JSON.parse(content); // Ensure the file content is valid JSON
+      } catch (err) {
+        alert("Invalid JSON file. Please check the file content.");
+        return;
+      }
+  
+      // Execute import
+      const success = await importDatabase(content);
+  
+      if (success) {
+        alert("Database imported successfully!");
+        // Refresh your app data here if needed
+      }
+    } catch (err) {
+      alert(`File processing failed: ${err.message}`);
+    }
+  };
+
   return (
     <IonPage>
       <IonHeader className="ion-header">
         <IonToolbar>
-          <IonTitle style={{ textAlign: "center" }}>SETTINGS</IonTitle>
+          <IonTitle style={{ textAlign: "center" }}>Settings</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -61,7 +101,6 @@ function Settings() {
         <IonInput
           label="Set late time"
           labelPlacement="floating"
-          // fill="outline"
           type="time"
           value={timeInput}
           helperText="The default late time is 7:40 AM"
@@ -75,6 +114,33 @@ function Settings() {
           SET LATE TIME
         </IonButton>
 
+      {/* BACKUP OPTIONS */}
+        <div style={{
+          marginTop: "20px",
+          padding: "10px",
+          backgroundColor: "#f0f0f0",
+          borderRadius: "8px",
+        }}>
+          <IonButton onClick={exportDatabase} expand="full" color="primary"> 
+            Create Backup{" "} <IonIcon icon={fileTrayOutline}></IonIcon>
+          </IonButton>
+
+          {/* File Picker */}
+          <input
+            type="file"
+            accept=".json"
+            onChange={handleFileChange}
+            style={{ marginTop: "10px", marginBottom: "10px" }}
+          />
+          <IonButton expand="block" onClick={handleImport}>
+            Import Database
+          </IonButton>
+
+        </div>
+
+
+
+      {/* ALERTS */}
         <IonAlert
           isOpen={showRestartAlert}
           onDidDismiss={() => setShowRestartAlert(false)}
@@ -87,6 +153,7 @@ function Settings() {
             },
           ]}
         />
+
       </IonContent>
     </IonPage>
   );

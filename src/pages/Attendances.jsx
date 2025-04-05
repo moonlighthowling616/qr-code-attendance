@@ -127,6 +127,7 @@ export default function Attendances() {
               color="primary"
               style={{ margin: "10px" }}
               onIonChange={handleDateChange}
+              max={new Date().toISOString().split("T")[0]} // Set max to today's date
             />
             </div>
             <IonButton

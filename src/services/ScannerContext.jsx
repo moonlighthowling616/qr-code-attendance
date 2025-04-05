@@ -62,7 +62,7 @@ export default function ScannerProvider({ children }) {
 
 
 	return (<>
-		<ScannerContext.Provider value={{startScan, isOpen, recorded, scanned, setRecorded, setToastOpen, toastOpen }}>
+		<ScannerContext.Provider value={{startScan, isOpen, setIsOpen,  recorded, scanned, setRecorded, setToastOpen, toastOpen }}>
 			{ children }
 		</ScannerContext.Provider>
 

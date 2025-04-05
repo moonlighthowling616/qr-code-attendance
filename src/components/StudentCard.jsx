@@ -97,6 +97,7 @@ function StudentCard({ student, time, lateTime, status }) {
           >
             P
           </h2>
+          {/* <small>Present (on time) </small> */}
         </div>
       );
     }
