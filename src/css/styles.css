@@ -46,3 +46,16 @@ ion-toolbar {
 	--background: #0D63FD;
 	--color: 'white';
 }
+
+ion-title {
+	--color: white !important;
+	font-size: 1.5em !important;
+	font-weight: bold !important;
+	/* text-align: center; */
+	/* margin-left: 0px; */
+	/* margin-right: 0px; */
+	/* padding-left: 0px; */
+	/* padding-right: 0px; */
+	/* padding-top: 0px; */
+	/* padding-bottom: 0px; */
+}

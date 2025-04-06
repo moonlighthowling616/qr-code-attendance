@@ -49,7 +49,7 @@ export default function Home() {
       <IonPage>
         <IonHeader className="ion-header">
           <IonToolbar>
-            <IonTitle style={{ textAlign: "center" }}>Home</IonTitle>
+            <IonTitle style={{ textAlign: "center"}}>Home</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent className="">

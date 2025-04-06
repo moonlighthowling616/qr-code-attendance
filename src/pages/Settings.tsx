@@ -17,6 +17,7 @@ import {
   IonGrid,
   IonRow,
   IonText,
+  IonLoading
 } from "@ionic/react";
 import {
   setLateTime,
@@ -36,7 +37,7 @@ function Settings() {
   const [timeInput, setTimeInput] = useState("");
   const [showRestartAlert, setShowRestartAlert] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
+  const [loading, setLoading] = useState(false);
   const handleReset = async () => {
     try {
       if (confirm("Are you sure you want to reset the database? This action cannot be undone.")) {
@@ -84,6 +85,21 @@ function Settings() {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
+    }
+  };
+
+  const handleExport = async () => {
+    try { 
+      setLoading(true);
+      await exportDatabase();
+      alert("Backup created successfully. Check your downloads folder.");
+    }
+    catch (err: any) { 
+      alert("Failed to create backup: " + err.message);
+      setLoading(false);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -149,7 +165,7 @@ function Settings() {
                   <IonGrid>
                     <IonRow>
                       <IonCol size="6">
-                        <IonButton expand="block" onClick={exportDatabase} color="primary">
+                        <IonButton expand="block" onClick={handleExport} color="primary">
                           <IonIcon icon={cloudUploadOutline} slot="start" />
                           Create Backup
                         </IonButton>
@@ -235,6 +251,8 @@ function Settings() {
                   {/* JynJo and Puting Lobo Studios | ©2024-2025 */}
                 {/* </IonText> */}
               </IonText>
+          <IonLoading isOpen={loading} message='Please wait...'/>
+
       </IonContent>
     </IonPage>
   );

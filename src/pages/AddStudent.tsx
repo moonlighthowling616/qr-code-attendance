@@ -25,7 +25,8 @@ export default function AddStudent() {
     try {
       setLoading(true);
       const studentData = { name, strand, id_number: idNumber };
-
+      setName('')
+      setIdNumber('')
       await createStudent(studentData); // Save the student data to the database
     } catch (err) {
       alert(
@@ -43,7 +44,7 @@ export default function AddStudent() {
       <IonPage>
         <IonHeader className="ion-header">
           <IonToolbar className="tool-bar">
-            <IonTitle>Student Registration</IonTitle>
+            <IonTitle>Student Unsa what the hell</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent class="ion-padding">

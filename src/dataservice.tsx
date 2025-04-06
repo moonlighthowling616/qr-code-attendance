@@ -2,8 +2,7 @@
 import { CapacitorSQLite } from "@capacitor-community/sqlite";
 import { SQLiteConnection, JsonSQLite  } from "@capacitor-community/sqlite";
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
-import importJson from "./import-json.json";
-
+import { Share } from '@capacitor/share'
 // Import your data to import
 const mSQLite = new SQLiteConnection(CapacitorSQLite);
 let database: any;
@@ -30,7 +29,7 @@ export const initdb = async () => {
     // REMOVING TABLES FOR TESTING
     // await database.execute("DROP TABLE IF EXISTS students;");
     // await database.execute("DROP TABLE IF EXISTS attendances;");
-    await database.execute("DROP TABLE IF EXISTS images;");
+    // await database.execute("DROP TABLE IF EXISTS images;");
 
     // Create tables
     await database.execute(`
@@ -71,20 +70,9 @@ export const initdb = async () => {
   }
 };
 
-
 export const resetDatabase = async () => {
   try {
-    // 2. Delete the entire database file
     await CapacitorSQLite.deleteDatabase({ database: "testdb" });
-    console.log("Database deleted successfully");
-
-    // 3. Reinitialize the database with fresh schema
-    await initdb();
-    console.log("Database reinitialized successfully");
-
-    // 4. Optional: Insert default data if needed
-    // await insertDefaultData();
-
     return true;
   } catch (error) {
     console.error("Error resetting database:", error);
@@ -107,16 +95,28 @@ export const exportDatabase = async () => {
 
     const jsonString = JSON.stringify(result.export, null, 2); // pretty-print JSON
     
-    // 2. Save to a file
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const fileName = `lccdo_export_${timestamp}.json`;
     
     const savedFile = await Filesystem.writeFile({
       path: fileName,
       data: jsonString,
-      directory: Directory.Documents,
+      directory: Directory.External,
       encoding: Encoding.UTF8,
     });
+
+    // const fileUriResult = await Filesystem.getUri({
+    //   directory: Directory.Data,
+    //   path: fileName,
+    // });
+
+
+    // await Share.share({
+    //   title: 'Exported Backup',
+    //   text: 'Your database has been exported successfully.',
+    //   url: fileUriResult.uri,
+    //   dialogTitle: 'Share Database Export',
+    // });
 
     alert('Database exported successfully to:' + savedFile.uri);
     return savedFile.uri;
@@ -412,17 +412,3 @@ export const fetchLateTime = async () => {
   }
 };
 
-const convertTo24Hour = (time: string): string => {
-  const [timePart, modifier] = time.split(" ");
-  let [hours, minutes] = timePart.split(":").map(Number);
-
-  if (modifier === "PM" && hours !== 12) {
-    hours += 12;
-  } else if (modifier === "AM" && hours === 12) {
-    hours = 0;
-  }
-
-  return `${hours.toString().padStart(2, "0")}:${minutes
-    .toString()
-    .padStart(2, "0")}:00`;
-};
