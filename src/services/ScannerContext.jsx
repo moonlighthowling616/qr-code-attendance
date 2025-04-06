@@ -73,7 +73,7 @@ export default function ScannerProvider({ children }) {
 		  });
 	  
 		try {
-			const response = await createAttendance(barcodes[0].rawValue);
+			await createAttendance(barcodes[0].rawValue);
 		} catch(err) {
 			alert(err)
 		}

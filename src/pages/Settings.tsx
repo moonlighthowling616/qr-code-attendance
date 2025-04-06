@@ -92,7 +92,7 @@ function Settings() {
     try { 
       setLoading(true);
       await exportDatabase();
-      alert("Backup created successfully. Check your downloads folder.");
+      alert("Backup created successfully. Check Android/data/ folder.");
     }
     catch (err: any) { 
       alert("Failed to create backup: " + err.message);
