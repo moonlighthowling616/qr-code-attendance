@@ -267,30 +267,42 @@ export const createStudent = async (studentData: any) => {
 };
 
 export const queryAllPresents = async () => {
-  // open database
-  await database.open();
+  try {
+    // Open database
+    await database.open();
 
-  // query to get all of the contacts from database
+    // Get the current date in local timezone
+    const currentDate = new Date();
+    const localDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000)
+      .toISOString()
+      .split("T")[0]; // Format: YYYY-MM-DD
 
-  return database.query(`
-    SELECT 
-    attendances.id AS attendance_id,
-    attendances.student_id,
-    attendances.day,
-    attendances.time_in,
-    students.id AS student_id,
-    students.name AS student_name,
-    students.strand AS student_strand,
-    students.id_number AS student_id_number
-    FROM 
+    // Query to get all of the contacts from the database
+    return database.query(
+      `
+      SELECT 
+        attendances.id AS attendance_id,
+        attendances.student_id,
+        attendances.day,
+        attendances.time_in,
+        students.id AS student_id,
+        students.name AS student_name,
+        students.strand AS student_strand,
+        students.id_number AS student_id_number
+      FROM 
         attendances
-    JOIN 
+      JOIN 
         students 
-    ON 
+      ON 
         attendances.student_id = students.id
-    WHERE 
-        attendances.day = DATE('now');  -- This gets the current date
-    `);
+      WHERE 
+        attendances.day = ?;  -- Use the local date
+      `,
+      [localDate]
+    );
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const createAttendance = async (studentId: any) => {
@@ -305,12 +317,16 @@ export const createAttendance = async (studentId: any) => {
     }
 
     const currentDate = new Date();
-    const day = currentDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+    const localDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000)
+      .toISOString()
+      .split("T")[0]; // Format: YYYY-MM-DD
+    alert(localDate);
+    // const day = currentDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
     const timeIn = currentDate.toTimeString().split(" ")[0]; // Format: HH:MM:SS
 
     const existingAttendance = await database.query(
       "SELECT * FROM attendances WHERE student_id = ? AND day = ?",
-      [result.values[0].id, day]
+      [result.values[0].id, localDate]
     );
 
     if (existingAttendance.values.length > 0) {
@@ -318,13 +334,13 @@ export const createAttendance = async (studentId: any) => {
         `UPDATE attendances
          SET time_in = ?
          WHERE student_id = ? AND day = ?`,
-        [timeIn, result.values[0].id, day]
+        [timeIn, result.values[0].id, localDate]
       );
     } else {
       return await database.run(
         `INSERT INTO attendances (student_id, day, time_in)
          VALUES (?, ?, ?)`,
-        [result.values[0].id, day, timeIn]
+        [result.values[0].id, localDate, timeIn]
       );
     }
   } catch (error) {
@@ -333,17 +349,25 @@ export const createAttendance = async (studentId: any) => {
 };
 
 export const queryAllAbsents = async () => {
+  try {
+    await database.open();
+    const currentDate = new Date();
+    const localDate = new Date(currentDate.getTime() - currentDate.getTimezoneOffset() * 60000)
+      .toISOString()
+      .split("T")[0];
+
+    // query to get all of the contacts from database
+  
+    return database.query(`
+      SELECT students.id, students.name, students.strand, students.id_number
+      FROM students
+      LEFT JOIN attendances ON students.id = attendances.student_id AND attendances.day = ?
+      WHERE attendances.id IS NULL;
+      `, [localDate]);
+  } catch (error) {
+    throw error;
+  }
   // open database
-  await database.open();
-
-  // query to get all of the contacts from database
-
-  return database.query(`
-    SELECT students.id, students.name, students.strand, students.id_number
-    FROM students
-    LEFT JOIN attendances ON students.id = attendances.student_id AND attendances.day = DATE('now')
-    WHERE attendances.id IS NULL;
-    `);
 };
 
 export const filterPresentAttendances = async (date: any) => {

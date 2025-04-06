@@ -34,7 +34,7 @@ export default function Attendances() {
   const [absents, setAbsents] = useState();
   const [loading, setLoading] = useState(false);
   const [currentDate, setCurrentDate] = useState();
-  const [lateTime, setLateTime] = useState(); 
+  const [lateTime, setLateTime] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const { scanned, toastOpen, setToastOpen } = useContext(ScannerContext);
 
@@ -44,12 +44,19 @@ export default function Attendances() {
         setLoading(true);
 
         // Fetching late time
-        const lateTime = await fetchLateTime();
-        if (lateTime.values.length > 0) {
-          setLateTime(lateTime.values[0].time);
+        try {
+          const lateTime = await fetchLateTime();
+          if (lateTime.values.length > 0) {
+            setLateTime(lateTime.values[0].time);
+          } else {
+            setLateTime("07:40"); // Default late time
+          }
+        } catch (err) {
+          console.error("Error fetching late time:", err);
+          alert("Failed to fetch late time.");
         }
 
-        // Setting the current date
+        // Setting the current date to be displayed
         const date = new Date();
         const options = { year: 'numeric', month: 'long', day: '2-digit' };
         const currentDate = date.toLocaleDateString('en-US', options);
@@ -57,10 +64,15 @@ export default function Attendances() {
 
 
         // Fetching records        
-        const get_presents = await queryAllPresents();
-        const get_absents = await queryAllAbsents();
-        setPresents(get_presents.values);
-        setAbsents(get_absents.values);
+        try {
+          const get_presents = await queryAllPresents();
+          const get_absents = await queryAllAbsents();
+          setPresents(get_presents.values || []);
+          setAbsents(get_absents.values || []);
+        } catch (err) {
+          alert(err);
+        }
+
       } catch (err) {
         alert(err);
       } finally {
@@ -75,15 +87,15 @@ export default function Attendances() {
       setLoading(true);
 
       const selectedDate = new Date(formatDate(e.detail.value));
-        const options = { year: 'numeric', month: 'long', day: '2-digit' };
-        const currentDate = selectedDate.toLocaleDateString('en-US', options);
-        setCurrentDate(currentDate)
-        
+      const options = { year: 'numeric', month: 'long', day: '2-digit' };
+      const currentDate = selectedDate.toLocaleDateString('en-US', options);
+      setCurrentDate(currentDate)
+
       const date = formatDate(e.detail.value);
       const filter_presents = await filterPresentAttendances(date);
       const filter_absents = await filterAbsentAttendances(date);
-      setPresents(filter_presents.values);
-      setAbsents(filter_absents.values);
+      setPresents(filter_presents?.values || []);
+      setAbsents(filter_absents?.values || []);
     } catch (err) {
       alert(err);
       console.log(err);
@@ -96,9 +108,9 @@ export default function Attendances() {
   const formatDate = (date) => {
     const d = new Date(date);
     const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0"); 
+    const month = String(d.getMonth() + 1).padStart(2, "0");
     const day = String(d.getDate()).padStart(2, "0");
-
+    alert(`${year}-${month}-${day}`)
     return `${year}-${month}-${day}`;
   };
 
@@ -121,15 +133,16 @@ export default function Attendances() {
             isOpen={isModalOpen}
             onDidDismiss={() => setIsModalOpen(false)}
           >
-            <div style={{padding: '12px'}}>
-            <span style={{color:'gray', fontSize: '.9em'}}>Filter attendances by date</span>
-            <IonDatetime
-              presentation="date"
-              color="primary"
-              style={{ margin: "10px" }}
-              onIonChange={handleDateChange}
-              max={new Date().toISOString().split("T")[0]} // Set max to today's date
-            />
+            <div style={{ padding: '12px' }}>
+              <span style={{ color: 'gray', fontSize: '.9em' }}>Filter attendances by date</span>
+              <IonDatetime
+                presentation="date"
+                color="primary"
+                style={{ margin: "10px" }}
+                onIonChange={handleDateChange}
+                // max={new Date().toISOString().slice(0, 10)} // Ensures the format is YYYY-MM-DD
+                // value={new Date().toISOString().slice(0, 10)} // Default to today's date
+              />
             </div>
             <IonButton
               expand="block"
@@ -141,8 +154,8 @@ export default function Attendances() {
             </IonButton>
           </IonModal>
           <IonGrid>
-            <div style={{padding: '.9em', textAlign: 'center'}}>
-              <span>Selected date: </span><h2 style={{fontWeight: 'bold'}}>{ currentDate && currentDate}</h2>
+            <div style={{ padding: '.9em', textAlign: 'center' }}>
+              <span>Selected date: </span><h2 style={{ fontWeight: 'bold' }}>{currentDate && currentDate}</h2>
             </div>
             <IonRow
               style={{
@@ -160,17 +173,15 @@ export default function Attendances() {
           </IonGrid>
           <IonList style={{ backgroundColor: "white" }}>
             {presents?.length > 0 &&
-              presents.map((present) => {
-                return (
-                  <StudentCard
-                    key={present.id}
-                    // status={present.remark}
-                    student={present.student_name}
-                    lateTime={lateTime}
-                    time={present.time_in}
-                  />
-                );
-              })}
+              presents.map((present) => (
+                <StudentCard
+                  key={present.id}
+                  student={present.student_name || "Unknown"}
+                  lateTime={lateTime || "N/A"}
+                  time={present.time_in || "N/A"}
+                />
+              ))
+            }
 
             {absents?.length > 0 &&
               absents.map((absent) => (
@@ -178,7 +189,7 @@ export default function Attendances() {
               ))}
           </IonList>
 
-          <IonLoading isOpen={loading} message='Please wait...'/>
+          <IonLoading isOpen={loading} message='Please wait...' />
           <IonToast
             isOpen={toastOpen}
             position="bottom"
@@ -187,10 +198,10 @@ export default function Attendances() {
             onDidDismiss={() => setToastOpen(false)}
             duration={3000}
           ></IonToast>
-                  <FabButton />
+          <FabButton />
 
         </IonContent>
-        
+
       </IonPage>
     </>
   );
