@@ -72,7 +72,11 @@ export default function ScannerProvider({ children }) {
 			formats: [BarcodeFormat.QrCode],
 		  });
 	  
-		  const response = await createAttendance(barcodes[0].rawValue);
+		try {
+			const response = await createAttendance(barcodes[0].rawValue);
+		} catch(err) {
+			alert(err)
+		}
 	  
 		  setToastOpen(true);
 		  setScanned(!scanned);

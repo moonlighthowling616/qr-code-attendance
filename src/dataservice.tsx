@@ -316,7 +316,7 @@ export const createAttendance = async (studentId: any) => {
     if (existingAttendance.values.length > 0) {
       return await database.run(
         `UPDATE attendances
-         SET time_in = ?,
+         SET time_in = ?
          WHERE student_id = ? AND day = ?`,
         [timeIn, result.values[0].id, day]
       );
@@ -328,7 +328,6 @@ export const createAttendance = async (studentId: any) => {
       );
     }
   } catch (error) {
-    console.error("Failed to create or update attendance record:", error);
     throw error;
   }
 };
