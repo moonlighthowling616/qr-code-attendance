@@ -1,0 +1,45 @@
+{
+  "database": "testdb",
+  "version": 1,
+  "encrypted": false,
+  "mode": "full",
+  "tables": [
+    {
+      "name": "images",
+      "schema": [
+        {"column": "id", "value": "INTEGER PRIMARY KEY NOT NULL"},
+        {"column": "student_id", "value": "INTEGER NOT NULL"},
+        {"column": "image_path", "value": "TEXT NOT NULL"},
+        {"value": "REFERENCES students(id) ON DELETE CASCADE", "foreignkey": "student_id"}
+      ],
+      "values": []
+    },
+    {
+      "name": "students",
+      "schema": [
+        {"column": "id", "value": "INTEGER PRIMARY KEY NOT NULL"},
+        {"column": "name", "value": "TEXT NOT NULL"},
+        {"column": "strand", "value": "TEXT NOT NULL"},
+        {"column": "id_number", "value": "TEXT NOT NULL UNIQUE"}
+      ],
+      "values": [
+        [1, "Jyn Jo", "HAHAH", "S23-0412"],
+        [2, "Aesha", "HAHAHA", "S23-0422"]
+      ]
+    },
+    {
+      "name": "attendances",
+      "schema": [
+        {"column": "id", "value": "INTEGER PRIMARY KEY NOT NULL"},
+        {"column": "student_id", "value": "INTEGER NOT NULL"},
+        {"column": "day", "value": "DATE NOT NULL"},
+        {"column": "time_in", "value": "TIME NOT NULL"},
+        {"value": "REFERENCES students(id) ON DELETE CASCADE", "foreignkey": "student_id"}
+      ],
+      "values": [
+        [1, 1, "2025-04-05", "08:44:09"],
+        [2, 2, "2025-04-05", "09:12:27"]
+      ]
+    }
+  ]
+}

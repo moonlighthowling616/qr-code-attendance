@@ -1,79 +1,88 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { 
+import React, { useContext, useState } from "react";
+import {
   IonPage,
   IonHeader,
-  IonToolbar, 
-  IonButton, 
+  IonToolbar,
+  IonButton,
   IonContent,
   IonInput,
-  IonItem,
-  IonList,
-  IonText,
   IonLoading,
-  IonTitle
-} from '@ionic/react'
-import { useHistory } from 'react-router-dom'
-import { ScannerContext } from '../services/ScannerContext.jsx'
-import { createStudent, initdb } from "../dataservice.tsx";
-import './AddStudent.css'
+  IonTitle,
+} from "@ionic/react";
+import { useHistory } from "react-router-dom";
+import { ScannerContext } from "../services/ScannerContext.jsx";
+import { createStudent } from "../dataservice.tsx";
 
 export default function AddStudent() {
-  const history = useHistory(); 
-  const [name, setName] = useState('');
-  const [idNumber, setIdNumber] = useState('');
-  const [strand, setStrand] = useState('');
+  const history = useHistory();
+  const [name, setName] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [strand, setStrand] = useState("");
   const [loading, setLoading] = useState(false);
-  const { recorded, setRecorded } = useContext(ScannerContext)
+  const { recorded, setRecorded }: any = useContext(ScannerContext);
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     try {
-      setLoading(true)
-      const studentData = {name, strand, id_number: idNumber}
-      await createStudent(studentData)
-    } catch(err) {
-      alert(err)
+      setLoading(true);
+      const studentData = { name, strand, id_number: idNumber };
+      setName('')
+      setIdNumber('')
+      await createStudent(studentData); // Save the student data to the database
+    } catch (err) {
+      alert(
+        "Something went wrong, please confirm that the ID number is not taken."
+      );
     } finally {
-      setRecorded(!recorded)
-      history.push('/home');
-      setLoading(false)
+      setRecorded(!recorded);
+      history.push("/home");
+      setLoading(false);
     }
-  }
+  };
 
   return (
-  	<>
-  		<IonPage>
-        <IonHeader>
-           <IonToolbar>
-            <IonTitle>Create Student</IonTitle>
+    <>
+      <IonPage>
+        <IonHeader className="ion-header">
+          <IonToolbar className="tool-bar">
+            <IonTitle>Student Registration</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent class='ion-padding' >
-        {/*<IonText color='dark'><h2>Add Classmate</h2></IonText>*/}
-         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px'}}>
-              <IonInput 
-                label="Full name" 
-                labelPlacement="floating" 
-                fill='outline'
-                onIonInput={(e) => setName(e.detail.value!) } 
-              />
-              <IonInput 
-                label="ID Number" 
-                labelPlacement="floating" 
-                fill='outline'
-                onIonInput={(e) => setIdNumber(e.detail.value!) } 
-                />
-              <IonInput 
-                label="Additional Information"
-                labelPlacement="floating" 
-                fill='outline' 
-                placeholder="(Specialization/Section/Level)"
-                onIonInput={(e) => setStrand(e.detail.value!) } 
-                />
-              <IonButton onClick={handleSubmit} expand='block' color='primary'>add student</IonButton>
+        <IonContent class="ion-padding">
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+          >
+            <IonInput
+              label="Name"
+              labelPlacement="floating"
+              placeholder="e.g. Ashvites, Reynard"
+              color="primary"
+              // fill="outline"
+              onIonInput={(e) => setName(e.detail.value!)}
+            />
+            <IonInput
+              label="ID Number"
+              labelPlacement="floating"
+              placeholder="e.g. S23-0401"
+              // fill="outline"
+              helperText="Please make sure the ID number is not taken."
+              onIonInput={(e) => setIdNumber(e.detail.value!)}
+              required
+            />
+            <IonInput
+              label="Track, Grade & Section"
+              labelPlacement="floating"
+              // fill="solid"
+              placeholder="e.g. TVL 12 - IOS"
+              onIonInput={(e) => setStrand(e.detail.value!)}
+            />
+
+            <IonButton onClick={handleSubmit}>
+              Save
+            </IonButton>
           </div>
           <IonLoading isOpen={loading} message="" />
         </IonContent>
       </IonPage>
-  	</>
+    </>
   );
 }

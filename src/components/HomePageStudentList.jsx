@@ -1,76 +1,91 @@
-import React, { useContext } from 'react';
-import {
-  IonAvatar,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonItem,
-  IonItemOptions,
-  IonItemOption,
-  IonItemSliding,
-  IonLabel,
-  IonList,
-  IonTitle,
-  IonToolbar,
-  IonCard,
-  IonCardContent,
-  IonText,
-  IonButton
-} from '@ionic/react';
-import { pencil, trash } from 'ionicons/icons';
-import {
-  deleteStudentById
-} from "../dataservice.tsx";
-import { ScannerContext } from '../services/ScannerContext.jsx'
+import React, { useContext } from "react";
+import { IonItem, IonLabel, IonButton, IonIcon, IonBadge } from "@ionic/react";
+import { personCircle, createOutline, trash } from "ionicons/icons"; // Import icons
+import { deleteStudentById } from "../dataservice.tsx";
+import { ScannerContext } from "../services/ScannerContext.jsx";
 
 function HomePageStudentList({ name, id, id_number }) {
-  const { recorded, setRecorded } = useContext(ScannerContext)
+  const { recorded, setRecorded } = useContext(ScannerContext);
 
-  const deleteStudent = async(id) => {
+  const deleteStudent = async (id) => {
     try {
-      await deleteStudentById(id)
-      setRecorded(!recorded)
-    } catch(err) {
-      alert('Error deleting: ' + err)
+      if (
+        confirm(
+          "Are you sure you want to delete? records will be lost and cannot be recovered."
+        )
+      ) {
+        await deleteStudentById(id);
+      }
+      setRecorded(!recorded);
+    } catch (err) {
+      alert("Error deleting: " + err);
     }
-  }
+  };
 
   return (
-    <>
-    <IonCard>
-      <IonCardContent style={{ display: 'flex', flexDirection: 'row', justifyContent: 'between', alignItems: 'center' }}>
-        <div style={{ flexGrow: 1 }}>
-          <IonText color='dark'>
-            <span style={{ fontWeight: 'bold' }}>{ name }</span>
-          </IonText>
-            <sm style={{ fontSize: '.9em'}}>{ id_number }</sm>
+    <IonItem
+      lines="none"
+      className="ion-no-padding"
+      style={{ borderBottom: "1px solid #e0e0e0" }}
+    >
+      <IonLabel
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "1em",
+          padding: "12px 16px",
+          flexWrap: "wrap", // Allows wrapping for smaller screens
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1em",
+            flex: "1 1 auto",
+          }}
+        >
+          <IonIcon
+            color="secondary"
+            icon={personCircle}
+            style={{ fontSize: "2em" }}
+          ></IonIcon>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: ".8em", fontWeight: "500" }}>
+              {name}
+            </h2>
+            <p style={{ margin: 0, color: "gray", fontSize: ".6em" }}>
+              {id_number}
+            </p>
+          </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '6px'}}>
-          <IonButton color='success' class='edit-btn' routerLink={`edit/${id}`}>
-            <IonIcon icon={pencil} />
+        <div
+          style={{
+            display: "flex",
+            gap: "0.5em",
+            flexWrap: "wrap", // Allows icons to stack on smaller screens
+          }}
+        >
+          <IonButton
+            color="light"
+            routerLink={`edit/${id}`}
+            // onClick={() => alert("Edit functionality not implemented yet")}
+          >
+            <IonIcon slot="icon-only" icon={createOutline} />
           </IonButton>
-          <IonButton color='danger' class='trash-btn' onClick={() => deleteStudent(id)}>
-            <IonIcon  icon={trash} />
+          <IonButton color="light" onClick={() => deleteStudent(id)}>
+            <IonIcon slot="icon-only" icon={trash} />
           </IonButton>
         </div>
-      </IonCardContent>
-    </IonCard>
-
-
-    {/*  <IonItemSliding>
-            <IonItem button={true}>
-              <IonLabel color='dark'>{ name }</IonLabel>
-            </IonItem>
-            <IonItemOptions slot="end">
-              <IonItemOption color="success" routerLink={`edit/${id}`}>
-                <IonIcon slot="icon-only" icon={pencil}></IonIcon>
-              </IonItemOption>
-              <IonItemOption color="danger" expandable={true} onClick={() => deleteStudent(id)}>
-                <IonIcon slot="icon-only" icon={trash}></IonIcon>
-              </IonItemOption>
-            </IonItemOptions>
-        </IonItemSliding>*/}
-    </>
+      </IonLabel>
+    </IonItem>
   );
 }
 export default HomePageStudentList;

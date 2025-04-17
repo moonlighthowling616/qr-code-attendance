@@ -2,7 +2,7 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  IonToast
+  IonAlert
 } from '@ionic/react'
 import { useState, useEffect, useContext } from 'react';
 import {
@@ -16,7 +16,7 @@ import { ScannerContext } from '../services/ScannerContext.jsx'
 export default function Scanner() {
   const [QrResult, setQrResult] = useState(null);
   const [isSupported, setIsSupported] = useState(false)
-  const { startScan, isOpen } = useContext(ScannerContext)
+  const { startScan, isOpen, setIsOpen } = useContext(ScannerContext)
 
   return (<>
       <IonFab onClick={startScan} slot="fixed" horizontal="end" vertical="bottom">
@@ -27,10 +27,10 @@ export default function Scanner() {
 
       <IonToast
         isOpen={isOpen}
-        position='bottom'
-        positionAnchor='footer'
+        header="Success"
         message="Attendance recorded."
-        duration={3000}
+        buttons={['Close']}
+        onDidDismiss={() => setIsOpen(false)}
       ></IonToast>
 
     </>

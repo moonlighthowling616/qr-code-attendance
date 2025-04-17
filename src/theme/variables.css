@@ -2,8 +2,10 @@
 http://ionicframework.com/docs/theming/ */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 :root {
+	--ion-color-pink: pink;
 	/** primary **/
-	--ion-color-primary: #ea9999;
+	/* --ion-color-primary: #E41B70; */
+	--ion-color-primary: #3D8BFD;
 	--ion-color-primary-rgb: 56, 128, 255;
 	--ion-color-primary-contrast: #ffffff;
 	--ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -11,7 +13,7 @@ http://ionicframework.com/docs/theming/ */
 	--ion-color-primary-tint: #4c8dff;
 
 	/** secondary **/
-	--ion-color-secondary: #3dc2ff;
+	--ion-color-secondary: #1DA1F2   ;
 	--ion-color-secondary-rgb: 61, 194, 255;
 	--ion-color-secondary-contrast: #ffffff;
 	--ion-color-secondary-contrast-rgb: 255, 255, 255;
@@ -28,9 +30,9 @@ http://ionicframework.com/docs/theming/ */
 
 	/** success **/
 /*	--ion-color-success: #2dd36f;*/
-	--ion-color-success: lightgreen;
+	--ion-color-success: #4CAF50 ;
 	--ion-color-success-rgb: 45, 211, 111;
-	--ion-color-success-contrast: #28a745;
+	--ion-color-success-contrast: white;
 	--ion-color-success-contrast-rgb: 255, 255, 255;
 	--ion-color-success-shade: #28ba62;
 	--ion-color-success-tint: #42d77d;
@@ -44,20 +46,20 @@ http://ionicframework.com/docs/theming/ */
 	--ion-color-warning-tint: #ffca22;
 
 	/** danger **/
-	--ion-color-danger: #FEC5C5;
-	--ion-color-danger-rgb: 235, 68, 90;
-	--ion-color-danger-contrast: #D9534F;
+	--ion-color-danger:#E0554A  ;
+	--ion-color-danger-rgb: 244, 67, 54;
+	--ion-color-danger-contrast: white;
 	--ion-color-danger-contrast-rgb: 255, 255, 255;
-	--ion-color-danger-shade: #cf3c4f;
-	--ion-color-danger-tint: #ed576b;
+	--ion-color-danger-shade: #E0554A;
+	--ion-color-danger-tint: #E0554A;
 
 	/** dark **/
-	--ion-color-dark: #222428;
+	/* --ion-color-dark: #222428;
 	--ion-color-dark-rgb: 34, 36, 40;
 	--ion-color-dark-contrast: #ffffff;
 	--ion-color-dark-contrast-rgb: 255, 255, 255;
 	--ion-color-dark-shade: #1e2023;
-	--ion-color-dark-tint: #383a3e;
+	--ion-color-dark-tint: #383a3e; */
 
 	/** medium **/
 	--ion-color-medium: #92949c;
