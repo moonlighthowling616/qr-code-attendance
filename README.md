@@ -1,5 +1,5 @@
 # **eBeadle: QR Code-Based Attendance Checker**
-An app that aims to automate the written attendance, for our capstone project. Special thanks goes to [our back-end developer](https://github.com/douwjyn)
+An app that aims to automate the written attendance, for our capstone project. Special thanks goes to [our back-end developer](https://github.com/Jyn-Tuyor)
 
 ## 📸**Screenshot/s**
 <img height="615" alt="image" src="https://github.com/user-attachments/assets/712aa0e2-6235-4a1d-a91e-4f6d352f3dd9" />
