@@ -9,3 +9,6 @@ An app that aims to automate the written attendance, for our capstone project. S
 ## 💾**Download**
 Download the [latest release](https://github.com/moonlighthowling616/ionic-capstone/releases) here
 - ⚠️ Exclusive to Android
+
+## 🤔**Where to find the source code?**
+A patch is available on **patch-1** branch
