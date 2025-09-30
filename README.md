@@ -11,4 +11,4 @@ Download the [latest release](https://github.com/moonlighthowling616/ionic-capst
 - ⚠️ Exclusive to Android
 
 ## 🤔**Where to find the source code?**
-A patch is available on **patch-1** branch
+All fils are in **main** branch, A patch is available on **patch-1** branch
